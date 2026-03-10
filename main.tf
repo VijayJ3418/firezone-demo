@@ -41,19 +41,19 @@ module "azure_core_infrastructure" {
   depends_on = [module.azure_networking_global]
 }
 
-# Jenkins VM Module - COMMENTED OUT FOR STEP-BY-STEP DEPLOYMENT
-# module "azure_jenkins_vm" {
-#   source = "./azure-jenkins-vm"
+# Jenkins VM Module - STEP 3: DEPLOYING NOW
+module "azure_jenkins_vm" {
+  source = "./azure-jenkins-vm"
 
-#   name_prefix         = var.name_prefix
-#   resource_group_name = module.azure_core_infrastructure.resource_group.name
-#   vnet_name          = module.azure_core_infrastructure.spoke_virtual_network.name
-#   ssh_public_key     = var.ssh_public_key
-#   vm_size            = var.jenkins_vm_size
-#   tags               = var.tags
+  name_prefix         = var.name_prefix
+  resource_group_name = module.azure_core_infrastructure.resource_group.name
+  vnet_name          = module.azure_core_infrastructure.spoke_virtual_network.name
+  ssh_public_key     = var.ssh_public_key
+  vm_size            = var.jenkins_vm_size
+  tags               = var.tags
 
-#   depends_on = [module.azure_core_infrastructure]
-# }
+  depends_on = [module.azure_core_infrastructure]
+}
 
 # Application Gateway Module - COMMENTED OUT FOR STEP-BY-STEP DEPLOYMENT
 # module "azure_jenkins_appgw" {
