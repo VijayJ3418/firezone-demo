@@ -61,7 +61,7 @@ variable "jenkins_static_ip" {
 
 variable "jenkins_fqdn" {
   type        = string
-  default     = "jenkins.np.dreamcompany.intranet"
+  default     = "jenkins.np.dglearn.online"
   description = "FQDN for Jenkins"
 }
 
