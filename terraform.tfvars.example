@@ -1,51 +1,31 @@
-# Azure Firezone Gateway Configuration Example
+# Azure Jenkins Infrastructure - Example Configuration
 # Copy this file to terraform.tfvars and customize the values
 
 # Basic Configuration
-name_prefix = "mycompany-"
+name_prefix = "vijay-"
 location    = "East US"
 
-# Networking
-subnet_id         = "/subscriptions/YOUR_SUBSCRIPTION_ID/resourceGroups/YOUR_RG/providers/Microsoft.Network/virtualNetworks/YOUR_VNET/subnets/YOUR_SUBNET"
-gateway_subnet_id = "/subscriptions/YOUR_SUBSCRIPTION_ID/resourceGroups/YOUR_RG/providers/Microsoft.Network/virtualNetworks/YOUR_VNET/subnets/YOUR_GATEWAY_SUBNET"
-enable_public_ip  = true
-enable_load_balancer = false
+# Network Configuration
+hub_address_space   = "172.16.0.0/16"
+spoke_address_space = "192.168.0.0/16"
 
-# Virtual Machine Configuration
-vm_size        = "Standard_B2s"
-instance_count = 1
-os_disk_type   = "Premium_LRS"
-admin_username = "azureuser"
-ssh_public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQ... your-public-key"
+# Features
+enable_bastion     = true
+enable_vpn_gateway = false
+enable_hub_peering = true
 
-# Firezone Configuration
-firezone_token        = "YOUR_FIREZONE_TOKEN_HERE"
-firezone_api_url      = "wss://api.firezone.dev"
-firezone_version      = "latest"
-firezone_artifact_url = "https://www.firezone.dev/dl/firezone-gateway"
+# Jenkins Configuration
+jenkins_vm_size   = "Standard_D2s_v3"
+jenkins_static_ip = "192.168.129.50"
+jenkins_fqdn      = "jenkins.np.dreamcompany.intranet"
 
-# Observability
-log_level  = "info"
-log_format = "human"
-
-# Health Check
-health_check = {
-  port                = 8080
-  path                = "/healthz"
-  interval_seconds    = 15
-  timeout_seconds     = 10
-  unhealthy_threshold = 3
-}
-
-# System Configuration
-swap_size_gb = 1
-
-# Availability
-availability_zones = ["1", "2", "3"]
+# SSH Key - Replace with your actual public key
+ssh_public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQ... your-public-key-here"
 
 # Tags
 tags = {
-  Environment = "production"
-  Project     = "firezone-gateway"
-  Owner       = "infrastructure-team"
+  Environment = "demo"
+  Project     = "jenkins"
+  Owner       = "vijay"
+  ManagedBy   = "terraform"
 }

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Azure Firezone Gateway Terraform Module
 
 This Terraform module deploys Firezone Gateway on Azure, equivalent to the GCP terraform-google-gateway module. It creates a Virtual Machine Scale Set running Ubuntu with Firezone Gateway installed and configured.
@@ -185,3 +186,6 @@ For issues and questions:
 ## License
 
 This module is provided under the same license as the original GCP module.
+=======
+This is test file.
+>>>>>>> origin/main
