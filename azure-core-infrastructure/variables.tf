@@ -55,7 +55,7 @@ variable "use_remote_gateways" {
 
 variable "dns_zone_name" {
   type        = string
-  default     = "dreamcompany.intranet"
+  default     = "dglearn.online"
   description = "Name of the private DNS zone (equivalent to GCP private DNS zone)"
 }
 
