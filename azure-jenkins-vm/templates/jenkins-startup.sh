@@ -147,7 +147,7 @@ done
 # Wait for Jenkins web interface to be ready
 echo "Waiting for Jenkins web interface..."
 for i in {1..60}; do
-    if curl -s -o /dev/null -w "%{http_code}" "http://localhost:$JENKINS_PORT" | grep -q "200\|403"; then
+    if curl -s -o /dev/null -w "%%{http_code}" "http://localhost:$JENKINS_PORT" | grep -q "200\|403"; then
         echo "Jenkins web interface is ready"
         break
     fi
