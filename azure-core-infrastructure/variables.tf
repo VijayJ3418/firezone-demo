@@ -25,7 +25,7 @@ variable "jenkins_subnet_cidr" {
 
 variable "appgw_subnet_cidr" {
   type        = string
-  default     = "192.168.129.0/23"
+  default     = "192.168.128.0/23"
   description = "CIDR block for Application Gateway subnet (equivalent to GCP proxy-only-subnet)"
 }
 
