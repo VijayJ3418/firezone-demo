@@ -10,7 +10,7 @@ hub_address_space   = "172.16.0.0/16"
 spoke_address_space = "192.168.0.0/16"
 
 # Features
-enable_bastion     = true
+enable_bastion     = false
 enable_vpn_gateway = false
 enable_hub_peering = true
 
