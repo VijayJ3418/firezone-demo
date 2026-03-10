@@ -5,11 +5,11 @@ output "hub_network" {
   value       = module.azure_networking_global
 }
 
-# COMMENTED OUT FOR STEP-BY-STEP DEPLOYMENT
-# output "spoke_network" {
-#   description = "Spoke network information"
-#   value       = module.azure_core_infrastructure
-# }
+# STEP 2: SPOKE NETWORK OUTPUT - ENABLED
+output "spoke_network" {
+  description = "Spoke network information"
+  value       = module.azure_core_infrastructure
+}
 
 # output "jenkins_vm" {
 #   description = "Jenkins VM information"

@@ -60,7 +60,7 @@ variable "vpn_gateway_sku" {
 
 variable "enable_bastion" {
   type        = bool
-  default     = true
+  default     = false
   description = "Whether to create Azure Bastion for secure access (equivalent to IAP)"
 }
 

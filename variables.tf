@@ -26,7 +26,7 @@ variable "spoke_address_space" {
 
 variable "enable_bastion" {
   type        = bool
-  default     = true
+  default     = false
   description = "Whether to create Azure Bastion for secure access"
 }
 

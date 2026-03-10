@@ -27,19 +27,19 @@ module "azure_networking_global" {
   tags                 = var.tags
 }
 
-# Spoke Network Module - COMMENTED OUT FOR STEP-BY-STEP DEPLOYMENT
-# module "azure_core_infrastructure" {
-#   source = "./azure-core-infrastructure"
+# Spoke Network Module - STEP 2: DEPLOYING NOW
+module "azure_core_infrastructure" {
+  source = "./azure-core-infrastructure"
 
-#   name_prefix           = var.name_prefix
-#   location             = var.location
-#   spoke_address_space  = var.spoke_address_space
-#   enable_hub_peering   = var.enable_hub_peering
-#   hub_vnet_id          = module.azure_networking_global.hub_virtual_network.id
-#   tags                 = var.tags
+  name_prefix           = var.name_prefix
+  location             = var.location
+  spoke_address_space  = var.spoke_address_space
+  enable_hub_peering   = var.enable_hub_peering
+  hub_vnet_id          = module.azure_networking_global.hub_virtual_network.id
+  tags                 = var.tags
 
-#   depends_on = [module.azure_networking_global]
-# }
+  depends_on = [module.azure_networking_global]
+}
 
 # Jenkins VM Module - COMMENTED OUT FOR STEP-BY-STEP DEPLOYMENT
 # module "azure_jenkins_vm" {
