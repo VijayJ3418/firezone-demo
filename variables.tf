@@ -59,10 +59,46 @@ variable "jenkins_static_ip" {
   description = "Static private IP for Application Gateway"
 }
 
+variable "secondary_region" {
+  type        = string
+  default     = "West US 2"
+  description = "Secondary Azure region for multi-region deployment"
+}
+
+variable "secondary_spoke_address_space" {
+  type        = string
+  default     = "10.168.0.0/16"
+  description = "Address space for the secondary spoke virtual network"
+}
+
+variable "vpn_subnet_cidr" {
+  type        = string
+  default     = "192.168.130.0/24"
+  description = "CIDR block for VPN subnet in primary region"
+}
+
+variable "secondary_vpn_subnet_cidr" {
+  type        = string
+  default     = "10.168.130.0/24"
+  description = "CIDR block for VPN subnet in secondary region"
+}
+
 variable "jenkins_fqdn" {
   type        = string
   default     = "jenkins.np.dglearn.online"
   description = "FQDN for Jenkins"
+}
+
+variable "firezone_token" {
+  type        = string
+  description = "Firezone authentication token for gateway registration"
+  sensitive   = true
+}
+
+variable "enable_firezone_multi_region" {
+  type        = bool
+  default     = true
+  description = "Whether to enable multi-region Firezone deployment with load balancer"
 }
 
 variable "tags" {

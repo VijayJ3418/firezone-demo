@@ -58,8 +58,8 @@ variable "os_disk_type" {
 
 variable "os_disk_size_gb" {
   type        = number
-  default     = 64
-  description = "Size of the OS disk in GB (minimum 64 GB for RHEL 9)"
+  default     = 32
+  description = "Size of the OS disk in GB (minimum 32 GB for Rocky Linux)"
 }
 
 variable "data_disk_type" {

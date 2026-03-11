@@ -34,6 +34,7 @@ module "azure_core_infrastructure" {
   name_prefix              = var.name_prefix
   location                = var.location
   spoke_address_space     = var.spoke_address_space
+  vpn_subnet_cidr         = var.vpn_subnet_cidr
   enable_hub_peering      = var.enable_hub_peering
   hub_vnet_id             = module.azure_networking_global.hub_virtual_network.id
   hub_resource_group_name = module.azure_networking_global.resource_group.name
@@ -56,6 +57,51 @@ module "azure_jenkins_vm" {
   tags               = var.tags
 
   depends_on = [module.azure_core_infrastructure]
+}
+
+# Secondary Region Infrastructure for Firezone
+module "azure_core_infrastructure_secondary" {
+  count  = var.enable_firezone_multi_region ? 1 : 0
+  source = "./azure-core-infrastructure-secondary"
+
+  name_prefix                  = var.name_prefix
+  location                    = var.secondary_region
+  spoke_address_space         = var.secondary_spoke_address_space
+  vpn_subnet_cidr             = var.secondary_vpn_subnet_cidr
+  enable_primary_peering      = true
+  primary_vnet_id             = module.azure_core_infrastructure.spoke_virtual_network.id
+  primary_resource_group_name = module.azure_core_infrastructure.resource_group.name
+  primary_vnet_name           = module.azure_core_infrastructure.spoke_virtual_network.name
+  tags                        = var.tags
+
+  depends_on = [module.azure_core_infrastructure]
+}
+
+# Multi-Region Firezone VPN Gateway Deployment
+module "azure_firezone_multi_region" {
+  count  = var.enable_firezone_multi_region ? 1 : 0
+  source = "./azure-firezone-multi-region"
+
+  name_prefix                     = var.name_prefix
+  primary_region                  = var.location
+  primary_resource_group_name     = module.azure_core_infrastructure.resource_group.name
+  primary_vnet_name              = module.azure_core_infrastructure.spoke_virtual_network.name
+  primary_vnet_id                = module.azure_core_infrastructure.spoke_virtual_network.id
+  primary_subnet_name            = module.azure_core_infrastructure.vpn_subnet.name
+  secondary_region               = var.secondary_region
+  secondary_resource_group_name  = module.azure_core_infrastructure_secondary[0].resource_group.name
+  secondary_vnet_name           = module.azure_core_infrastructure_secondary[0].spoke_virtual_network.name
+  secondary_vnet_id             = module.azure_core_infrastructure_secondary[0].spoke_virtual_network.id
+  secondary_subnet_name         = module.azure_core_infrastructure_secondary[0].vpn_subnet.name
+  vm_size                       = "Standard_B2s"
+  ssh_public_key                = var.ssh_public_key
+  firezone_token                = var.firezone_token
+  tags                          = var.tags
+
+  depends_on = [
+    module.azure_core_infrastructure,
+    module.azure_core_infrastructure_secondary
+  ]
 }
 
 # Application Gateway Module - COMMENTED OUT FOR STEP-BY-STEP DEPLOYMENT

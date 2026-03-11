@@ -36,6 +36,15 @@ output "appgw_subnet" {
   }
 }
 
+output "vpn_subnet" {
+  description = "VPN subnet information for Firezone gateway"
+  value = {
+    name             = azurerm_subnet.subnet_vpn.name
+    id               = azurerm_subnet.subnet_vpn.id
+    address_prefixes = azurerm_subnet.subnet_vpn.address_prefixes
+  }
+}
+
 output "jenkins_nsg" {
   description = "Jenkins network security group information"
   value = {

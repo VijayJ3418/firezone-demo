@@ -36,6 +36,14 @@ resource "azurerm_subnet" "subnet_appgw" {
   address_prefixes     = [var.appgw_subnet_cidr]
 }
 
+# VPN Subnet for Firezone Gateway
+resource "azurerm_subnet" "subnet_vpn" {
+  name                 = "subnet-vpn"
+  resource_group_name  = azurerm_resource_group.core_infrastructure.name
+  virtual_network_name = azurerm_virtual_network.vpc_spoke.name
+  address_prefixes     = [var.vpn_subnet_cidr]
+}
+
 # Network Security Group for Jenkins
 resource "azurerm_network_security_group" "jenkins_nsg" {
   name                = "${var.name_prefix}jenkins-nsg"

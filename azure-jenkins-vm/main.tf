@@ -82,11 +82,11 @@ resource "azurerm_linux_virtual_machine" "jenkins_vm" {
     disk_size_gb         = var.os_disk_size_gb
   }
 
-  # Rocky Linux 9 equivalent (using RHEL 9)
+  # Rocky Linux latest
   source_image_reference {
-    publisher = "RedHat"
-    offer     = "RHEL"
-    sku       = "9-lvm-gen2"
+    publisher = "erockyenterprisesoftwarefoundationinc1653071250513"
+    offer     = "rockylinux"
+    sku       = "free"
     version   = "latest"
   }
 

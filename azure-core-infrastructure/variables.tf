@@ -29,6 +29,12 @@ variable "appgw_subnet_cidr" {
   description = "CIDR block for Application Gateway subnet (equivalent to GCP proxy-only-subnet)"
 }
 
+variable "vpn_subnet_cidr" {
+  type        = string
+  default     = "192.168.130.0/24"
+  description = "CIDR block for VPN subnet for Firezone gateway"
+}
+
 variable "hub_address_space" {
   type        = string
   default     = "172.16.0.0/16"
