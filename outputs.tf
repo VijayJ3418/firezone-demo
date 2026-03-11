@@ -11,24 +11,24 @@ output "spoke_network" {
   value       = module.azure_core_infrastructure
 }
 
-# STEP 3: JENKINS VM OUTPUT - ENABLED (Single VM Only)
-output "jenkins_vm" {
-  description = "Jenkins VM information"
-  value       = module.azure_jenkins_vm
-  sensitive   = true
-}
+# STEP 3: JENKINS VM OUTPUT - DISABLED TEMPORARILY
+# output "jenkins_vm" {
+#   description = "Jenkins VM information"
+#   value       = module.azure_jenkins_vm
+#   sensitive   = true
+# }
 
-# Firezone Multi-Region Outputs
-output "firezone_multi_region" {
-  description = "Multi-region Firezone VPN gateway deployment information"
-  value       = var.enable_firezone_multi_region ? module.azure_firezone_multi_region[0] : null
-  sensitive   = true
-}
+# Firezone Multi-Region Outputs - DISABLED TEMPORARILY
+# output "firezone_multi_region" {
+#   description = "Multi-region Firezone VPN gateway deployment information"
+#   value       = var.enable_firezone_multi_region ? module.azure_firezone_multi_region[0] : null
+#   sensitive   = true
+# }
 
-output "secondary_infrastructure" {
-  description = "Secondary region infrastructure information for Firezone"
-  value       = var.enable_firezone_multi_region ? module.azure_core_infrastructure_secondary[0] : null
-}
+# output "secondary_infrastructure" {
+#   description = "Secondary region infrastructure information for Firezone"
+#   value       = var.enable_firezone_multi_region ? module.azure_core_infrastructure_secondary[0] : null
+# }
 
 # output "application_gateway" {
 #   description = "Application Gateway information"
