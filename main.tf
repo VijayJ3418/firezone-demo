@@ -27,6 +27,7 @@ module "azure_networking_global" {
   location             = var.location
   hub_address_space    = var.hub_address_space
   vpn_subnet_cidr      = var.hub_vpn_subnet_cidr
+  spoke_address_spaces = [var.spoke_address_space, var.secondary_spoke_address_space]
   enable_bastion       = var.enable_bastion
   enable_vpn_gateway   = var.enable_vpn_gateway
   tags                 = var.tags
