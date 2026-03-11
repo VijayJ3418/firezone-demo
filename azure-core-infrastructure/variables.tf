@@ -47,6 +47,24 @@ variable "hub_vnet_id" {
   description = "Resource ID of the hub virtual network for peering"
 }
 
+variable "hub_resource_group_name" {
+  type        = string
+  default     = ""
+  description = "Resource group name of the hub virtual network"
+}
+
+variable "hub_vnet_name" {
+  type        = string
+  default     = ""
+  description = "Name of the hub virtual network"
+}
+
+variable "hub_has_gateway" {
+  type        = bool
+  default     = false
+  description = "Whether the hub network has a VPN gateway"
+}
+
 variable "use_remote_gateways" {
   type        = bool
   default     = false

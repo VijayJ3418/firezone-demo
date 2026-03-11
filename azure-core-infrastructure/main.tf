@@ -168,6 +168,21 @@ resource "azurerm_virtual_network_peering" "spoke_to_hub" {
   use_remote_gateways          = var.use_remote_gateways
 }
 
+# Reverse VNet Peering from Hub to Spoke
+resource "azurerm_virtual_network_peering" "hub_to_spoke" {
+  count                        = var.enable_hub_peering ? 1 : 0
+  name                         = "hub-to-spoke-peering"
+  resource_group_name          = var.hub_resource_group_name
+  virtual_network_name         = var.hub_vnet_name
+  remote_virtual_network_id    = azurerm_virtual_network.vpc_spoke.id
+  allow_virtual_network_access = true
+  allow_forwarded_traffic      = true
+  allow_gateway_transit        = var.hub_has_gateway
+  use_remote_gateways          = false
+
+  depends_on = [azurerm_virtual_network_peering.spoke_to_hub]
+}
+
 # Private DNS Zone (equivalent to GCP Private DNS Zone)
 resource "azurerm_private_dns_zone" "jenkins_dns" {
   name                = var.dns_zone_name

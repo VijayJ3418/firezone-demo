@@ -24,8 +24,6 @@ module "azure_networking_global" {
   hub_address_space    = var.hub_address_space
   enable_bastion       = var.enable_bastion
   enable_vpn_gateway   = var.enable_vpn_gateway
-  enable_spoke_peering = var.enable_hub_peering
-  spoke_vnet_id        = try(module.azure_core_infrastructure.spoke_virtual_network.id, "")
   tags                 = var.tags
 }
 
@@ -33,12 +31,15 @@ module "azure_networking_global" {
 module "azure_core_infrastructure" {
   source = "./azure-core-infrastructure"
 
-  name_prefix           = var.name_prefix
-  location             = var.location
-  spoke_address_space  = var.spoke_address_space
-  enable_hub_peering   = var.enable_hub_peering
-  hub_vnet_id          = module.azure_networking_global.hub_virtual_network.id
-  tags                 = var.tags
+  name_prefix              = var.name_prefix
+  location                = var.location
+  spoke_address_space     = var.spoke_address_space
+  enable_hub_peering      = var.enable_hub_peering
+  hub_vnet_id             = module.azure_networking_global.hub_virtual_network.id
+  hub_resource_group_name = module.azure_networking_global.resource_group.name
+  hub_vnet_name           = module.azure_networking_global.hub_virtual_network.name
+  hub_has_gateway         = var.enable_vpn_gateway
+  tags                    = var.tags
 
   depends_on = [module.azure_networking_global]
 }
