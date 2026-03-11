@@ -23,14 +23,17 @@ provider "azurerm" {
 module "azure_networking_global" {
   source = "./azure-networking-global"
 
-  name_prefix           = var.name_prefix
-  location             = var.location
-  hub_address_space    = var.hub_address_space
-  vpn_subnet_cidr      = var.hub_vpn_subnet_cidr
-  spoke_address_spaces = [var.spoke_address_space, var.secondary_spoke_address_space]
-  enable_bastion       = var.enable_bastion
-  enable_vpn_gateway   = var.enable_vpn_gateway
-  tags                 = var.tags
+  name_prefix            = var.name_prefix
+  location              = var.location
+  hub_address_space     = var.hub_address_space
+  vpn_subnet_cidr       = var.hub_vpn_subnet_cidr
+  gateway_subnet_cidr   = var.gateway_subnet_cidr
+  bastion_subnet_cidr   = var.bastion_subnet_cidr
+  spoke_address_spaces  = [var.spoke_address_space, var.secondary_spoke_address_space]
+  enable_bastion        = var.enable_bastion
+  enable_vpn_gateway    = var.enable_vpn_gateway
+  vpn_gateway_sku       = var.vpn_gateway_sku
+  tags                  = var.tags
 }
 
 # Spoke Network Module - STEP 2: DEPLOYING NOW
@@ -40,12 +43,16 @@ module "azure_core_infrastructure" {
   name_prefix              = var.name_prefix
   location                = var.location
   spoke_address_space     = var.spoke_address_space
+  jenkins_subnet_cidr     = var.jenkins_subnet_cidr
+  appgw_subnet_cidr       = var.appgw_subnet_cidr
   vpn_subnet_cidr         = var.vpn_subnet_cidr
+  hub_address_space       = var.hub_address_space
   enable_hub_peering      = var.enable_hub_peering
   hub_vnet_id             = module.azure_networking_global.hub_virtual_network.id
   hub_resource_group_name = module.azure_networking_global.resource_group.name
   hub_vnet_name           = module.azure_networking_global.hub_virtual_network.name
   hub_has_gateway         = var.enable_vpn_gateway
+  dns_zone_name           = var.dns_zone_name
   tags                    = var.tags
 
   depends_on = [module.azure_networking_global]

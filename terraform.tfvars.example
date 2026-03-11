@@ -3,11 +3,19 @@
 
 # Basic Configuration
 name_prefix = "vijay-"
-location    = "East US"
+location    = "West US 2"  # Changed to working region
 
 # Network Configuration
 hub_address_space   = "172.16.0.0/16"
 spoke_address_space = "192.168.0.0/16"
+
+# Subnet Configuration
+jenkins_subnet_cidr   = "192.168.0.0/24"
+appgw_subnet_cidr     = "192.168.128.0/23"
+vpn_subnet_cidr       = "192.168.130.0/24"
+hub_vpn_subnet_cidr   = "172.16.0.0/24"
+gateway_subnet_cidr   = "172.16.1.0/24"
+bastion_subnet_cidr   = "172.16.2.0/24"
 
 # Features
 enable_bastion     = false
@@ -15,9 +23,21 @@ enable_vpn_gateway = false
 enable_hub_peering = true
 
 # Jenkins Configuration
-jenkins_vm_size   = "Standard_D2s_v3"
+jenkins_vm_size   = "Standard_B1s"  # Changed to working VM size
 jenkins_static_ip = "192.168.129.50"
 jenkins_fqdn      = "jenkins.np.dglearn.online"
+
+# DNS Configuration
+dns_zone_name = "dglearn.online"
+
+# Multi-region Configuration (for future Firezone deployment)
+secondary_region              = "East US"
+secondary_spoke_address_space = "10.168.0.0/16"
+secondary_vpn_subnet_cidr     = "10.168.130.0/24"
+enable_firezone_multi_region  = false
+
+# Firezone Token (set in Terraform Cloud as sensitive variable)
+firezone_token = ""
 
 # SSH Key - Replace with your actual public key
 ssh_public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQ... your-public-key-here"

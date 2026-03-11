@@ -117,3 +117,40 @@ variable "tags" {
   }
   description = "Tags to apply to all resources"
 }
+
+# Additional variables needed by modules
+variable "jenkins_subnet_cidr" {
+  type        = string
+  default     = "192.168.0.0/24"
+  description = "CIDR block for Jenkins subnet"
+}
+
+variable "appgw_subnet_cidr" {
+  type        = string
+  default     = "192.168.128.0/23"
+  description = "CIDR block for Application Gateway subnet"
+}
+
+variable "gateway_subnet_cidr" {
+  type        = string
+  default     = "172.16.1.0/24"
+  description = "CIDR block for VPN Gateway subnet in hub network"
+}
+
+variable "bastion_subnet_cidr" {
+  type        = string
+  default     = "172.16.2.0/24"
+  description = "CIDR block for Azure Bastion subnet"
+}
+
+variable "vpn_gateway_sku" {
+  type        = string
+  default     = "VpnGw1"
+  description = "SKU for VPN Gateway"
+}
+
+variable "dns_zone_name" {
+  type        = string
+  default     = "dglearn.online"
+  description = "Name of the private DNS zone"
+}
