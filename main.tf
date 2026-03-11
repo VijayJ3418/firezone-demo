@@ -26,6 +26,7 @@ module "azure_networking_global" {
   name_prefix           = var.name_prefix
   location             = var.location
   hub_address_space    = var.hub_address_space
+  vpn_subnet_cidr      = var.hub_vpn_subnet_cidr
   enable_bastion       = var.enable_bastion
   enable_vpn_gateway   = var.enable_vpn_gateway
   tags                 = var.tags

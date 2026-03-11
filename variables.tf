@@ -18,6 +18,12 @@ variable "hub_address_space" {
   description = "Address space for the hub virtual network"
 }
 
+variable "hub_vpn_subnet_cidr" {
+  type        = string
+  default     = "172.16.0.0/24"
+  description = "CIDR block for VPN subnet in hub network"
+}
+
 variable "spoke_address_space" {
   type        = string
   default     = "192.168.0.0/16"
