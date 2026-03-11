@@ -80,15 +80,15 @@ resource "azurerm_linux_virtual_machine" "firezone_gateway" {
 
   os_disk {
     caching              = "ReadWrite"
-    storage_account_type = "Standard_LRS"
+    storage_account_type = "Premium_LRS"
     disk_size_gb         = 32
   }
 
-  # Ubuntu 22.04 LTS (Firezone recommended) - Generation 1 for A-series compatibility
+  # Ubuntu 22.04 LTS (Firezone recommended) - Generation 2 for B-series
   source_image_reference {
     publisher = "Canonical"
     offer     = "0001-com-ubuntu-server-jammy"
-    sku       = "22_04-lts"
+    sku       = "22_04-lts-gen2"
     version   = "latest"
   }
 
