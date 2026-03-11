@@ -89,6 +89,21 @@ resource "azurerm_subnet_network_security_group_association" "vpn_subnet_nsg" {
   network_security_group_id = azurerm_network_security_group.hub_nsg.id
 }
 
+# VNet Peering from Hub to Spoke (reverse peering)
+resource "azurerm_virtual_network_peering" "hub_to_spoke" {
+  count                        = var.enable_spoke_peering ? 1 : 0
+  name                         = "hub-to-spoke-peering"
+  resource_group_name          = azurerm_resource_group.networking_global.name
+  virtual_network_name         = azurerm_virtual_network.vpc_hub.name
+  remote_virtual_network_id    = var.spoke_vnet_id
+  allow_virtual_network_access = true
+  allow_forwarded_traffic      = true
+  allow_gateway_transit        = var.enable_vpn_gateway
+  use_remote_gateways          = false
+
+  depends_on = [var.spoke_vnet_id]
+}
+
 # Public IP for VPN Gateway
 resource "azurerm_public_ip" "vpn_gateway_pip" {
   count               = var.enable_vpn_gateway ? 1 : 0

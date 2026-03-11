@@ -11,11 +11,12 @@ output "spoke_network" {
   value       = module.azure_core_infrastructure
 }
 
-# output "jenkins_vm" {
-#   description = "Jenkins VM information"
-#   value       = module.azure_jenkins_vm
-#   sensitive   = true
-# }
+# STEP 3: JENKINS VM OUTPUT - ENABLED
+output "jenkins_vm" {
+  description = "Jenkins VM information"
+  value       = module.azure_jenkins_vm
+  sensitive   = true
+}
 
 # output "application_gateway" {
 #   description = "Application Gateway information"

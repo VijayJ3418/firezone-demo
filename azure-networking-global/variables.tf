@@ -64,6 +64,18 @@ variable "enable_bastion" {
   description = "Whether to create Azure Bastion for secure access (equivalent to IAP)"
 }
 
+variable "enable_spoke_peering" {
+  type        = bool
+  default     = false
+  description = "Whether to create peering from hub to spoke network"
+}
+
+variable "spoke_vnet_id" {
+  type        = string
+  default     = ""
+  description = "Resource ID of the spoke virtual network for peering"
+}
+
 variable "tags" {
   type        = map(string)
   default     = {}
