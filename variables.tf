@@ -8,7 +8,7 @@ variable "name_prefix" {
 
 variable "location" {
   type        = string
-  default     = "East US"
+  default     = "Central US"
   description = "Azure region for deployment"
 }
 
@@ -49,7 +49,7 @@ variable "ssh_public_key" {
 
 variable "jenkins_vm_size" {
   type        = string
-  default     = "Standard_B1ms"
+  default     = "Standard_A1_v2"
   description = "Size of the Jenkins VM"
 }
 
