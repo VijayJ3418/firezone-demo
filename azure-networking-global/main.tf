@@ -43,9 +43,9 @@ resource "azurerm_network_security_group" "hub_nsg" {
   resource_group_name = azurerm_resource_group.networking_global.name
   tags                = var.tags
 
-  # Allow SSH from Azure Bastion (equivalent to IAP)
+  # Allow SSH from VirtualNetwork
   security_rule {
-    name                       = "AllowBastionSSH"
+    name                       = "AllowSSH"
     priority                   = 1000
     direction                  = "Inbound"
     access                     = "Allow"
@@ -56,7 +56,7 @@ resource "azurerm_network_security_group" "hub_nsg" {
     destination_address_prefix = "*"
   }
 
-  # Allow WireGuard/Firezone traffic (equivalent to allow-firezone-udp)
+  # Allow WireGuard/Firezone traffic
   security_rule {
     name                       = "AllowWireGuard"
     priority                   = 1100
@@ -69,16 +69,16 @@ resource "azurerm_network_security_group" "hub_nsg" {
     destination_address_prefix = "*"
   }
 
-  # Allow HTTPS from spoke networks
+  # Allow HTTPS
   security_rule {
-    name                       = "AllowSpokeHTTPS"
+    name                       = "AllowHTTPS"
     priority                   = 1200
     direction                  = "Inbound"
     access                     = "Allow"
     protocol                   = "Tcp"
     source_port_range          = "*"
     destination_port_range     = "443"
-    source_address_prefixes    = var.spoke_address_spaces
+    source_address_prefix      = "*"
     destination_address_prefix = "*"
   }
 }
@@ -87,6 +87,11 @@ resource "azurerm_network_security_group" "hub_nsg" {
 resource "azurerm_subnet_network_security_group_association" "vpn_subnet_nsg" {
   subnet_id                 = azurerm_subnet.subnet_vpn.id
   network_security_group_id = azurerm_network_security_group.hub_nsg.id
+
+  depends_on = [
+    azurerm_subnet.subnet_vpn,
+    azurerm_network_security_group.hub_nsg
+  ]
 }
 
 # Public IP for VPN Gateway
