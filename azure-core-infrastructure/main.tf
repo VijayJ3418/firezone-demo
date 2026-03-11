@@ -38,7 +38,7 @@ resource "azurerm_subnet" "subnet_appgw" {
 
 # VPN Subnet for Firezone Gateway
 resource "azurerm_subnet" "subnet_vpn" {
-  name                 = "subnet-vpn-v3"
+  name                 = "subnet-vpn-v4"
   resource_group_name  = azurerm_resource_group.core_infrastructure.name
   virtual_network_name = azurerm_virtual_network.vpc_spoke.name
   address_prefixes     = [var.vpn_subnet_cidr]
@@ -166,7 +166,7 @@ resource "azurerm_subnet_network_security_group_association" "appgw_subnet_nsg" 
 # VNet Peering from Spoke to Hub
 resource "azurerm_virtual_network_peering" "spoke_to_hub" {
   count                        = var.enable_hub_peering ? 1 : 0
-  name                         = "spoke-to-hub-peering"
+  name                         = "spoke-to-hub-peering-v4"
   resource_group_name          = azurerm_resource_group.core_infrastructure.name
   virtual_network_name         = azurerm_virtual_network.vpc_spoke.name
   remote_virtual_network_id    = var.hub_vnet_id
@@ -179,7 +179,7 @@ resource "azurerm_virtual_network_peering" "spoke_to_hub" {
 # Reverse VNet Peering from Hub to Spoke
 resource "azurerm_virtual_network_peering" "hub_to_spoke" {
   count                        = var.enable_hub_peering ? 1 : 0
-  name                         = "hub-to-spoke-peering-v3"
+  name                         = "hub-to-spoke-peering-v4"
   resource_group_name          = var.hub_resource_group_name
   virtual_network_name         = var.hub_vnet_name
   remote_virtual_network_id    = azurerm_virtual_network.vpc_spoke.id

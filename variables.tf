@@ -79,7 +79,7 @@ variable "secondary_spoke_address_space" {
 
 variable "vpn_subnet_cidr" {
   type        = string
-  default     = "192.168.130.0/24"
+  default     = "192.168.131.0/24"
   description = "CIDR block for VPN subnet in primary region"
 }
 

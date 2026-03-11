@@ -12,7 +12,7 @@ spoke_address_space = "192.168.0.0/16"
 # Subnet Configuration
 jenkins_subnet_cidr   = "192.168.0.0/24"
 appgw_subnet_cidr     = "192.168.128.0/23"
-vpn_subnet_cidr       = "192.168.130.0/24"
+vpn_subnet_cidr       = "192.168.131.0/24"
 hub_vpn_subnet_cidr   = "172.16.0.0/24"
 gateway_subnet_cidr   = "172.16.1.0/24"
 bastion_subnet_cidr   = "172.16.2.0/24"
