@@ -1,5 +1,5 @@
 #!/bin/bash
-# Jenkins Installation Script for Azure VM (Rocky Linux/RHEL equivalent)
+# Jenkins Installation Script for Azure VM (Ubuntu 22.04 LTS)
 # Equivalent to GCP startup script
 
 set -e
@@ -60,21 +60,22 @@ echo "Data disk mounted at $MOUNT_POINT"
 
 # Update system packages
 echo "Updating system packages..."
-dnf update -y
+apt-get update -y
 
 # Install required packages
 echo "Installing required packages..."
-dnf install -y wget curl java-17-openjdk java-17-openjdk-devel
+apt-get install -y wget curl openjdk-17-jdk
 
 # Set JAVA_HOME
-echo "export JAVA_HOME=/usr/lib/jvm/java-17-openjdk" >> /etc/environment
-export JAVA_HOME=/usr/lib/jvm/java-17-openjdk
+echo "export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64" >> /etc/environment
+export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
 
 # Install Jenkins
 echo "Installing Jenkins..."
-wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
-rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
-dnf install -y jenkins
+wget -O /usr/share/keyrings/jenkins-keyring.asc https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+echo "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian-stable binary/" | tee /etc/apt/sources.list.d/jenkins.list > /dev/null
+apt-get update -y
+apt-get install -y jenkins
 
 # Configure Jenkins to use the data disk
 echo "Configuring Jenkins..."
@@ -85,7 +86,7 @@ mkdir -p "$MOUNT_POINT/jenkins_home"
 chown -R jenkins:jenkins "$MOUNT_POINT/jenkins_home"
 
 # Update Jenkins configuration
-JENKINS_SERVICE_FILE="/usr/lib/systemd/system/jenkins.service"
+JENKINS_SERVICE_FILE="/lib/systemd/system/jenkins.service"
 if [ -f "$JENKINS_SERVICE_FILE" ]; then
     # Update JENKINS_HOME in service file
     sed -i "s|Environment=\"JENKINS_HOME=/var/lib/jenkins\"|Environment=\"JENKINS_HOME=$MOUNT_POINT/jenkins_home\"|" "$JENKINS_SERVICE_FILE"
@@ -116,14 +117,12 @@ if [ "$JENKINS_PORT" -lt 1024 ]; then
     echo "Configured Java for privileged port binding"
 fi
 
-# Configure firewall
+# Configure firewall (UFW on Ubuntu)
 echo "Configuring firewall..."
-systemctl enable firewalld
-systemctl start firewalld
+ufw --force enable
 
 # Open Jenkins port
-firewall-cmd --permanent --add-port="$JENKINS_PORT/tcp"
-firewall-cmd --reload
+ufw allow "$JENKINS_PORT/tcp"
 
 echo "Firewall configured for port $JENKINS_PORT"
 
@@ -147,7 +146,7 @@ done
 # Wait for Jenkins web interface to be ready
 echo "Waiting for Jenkins web interface..."
 for i in {1..60}; do
-    if curl -s -o /dev/null -w "%%{http_code}" "http://localhost:$JENKINS_PORT" | grep -q "200\|403"; then
+    if curl -s -o /dev/null -w "%{http_code}" "http://localhost:$JENKINS_PORT" | grep -q "200\|403"; then
         echo "Jenkins web interface is ready"
         break
     fi

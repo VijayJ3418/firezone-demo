@@ -91,13 +91,14 @@ variable "jenkins_fqdn" {
 
 variable "firezone_token" {
   type        = string
+  default     = ""
   description = "Firezone authentication token for gateway registration"
   sensitive   = true
 }
 
 variable "enable_firezone_multi_region" {
   type        = bool
-  default     = true
+  default     = false
   description = "Whether to enable multi-region Firezone deployment with load balancer"
 }
 
