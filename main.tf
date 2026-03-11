@@ -47,7 +47,7 @@ module "azure_core_infrastructure" {
   appgw_subnet_cidr       = var.appgw_subnet_cidr
   vpn_subnet_cidr         = var.vpn_subnet_cidr
   hub_address_space       = var.hub_address_space
-  enable_hub_peering      = var.enable_hub_peering
+  enable_hub_peering      = false  # TEMPORARILY DISABLED TO FIX PEERING CONFLICTS
   hub_vnet_id             = module.azure_networking_global.hub_virtual_network.id
   hub_resource_group_name = module.azure_networking_global.resource_group.name
   hub_vnet_name           = module.azure_networking_global.hub_virtual_network.name
