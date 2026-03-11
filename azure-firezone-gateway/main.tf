@@ -84,11 +84,11 @@ resource "azurerm_linux_virtual_machine" "firezone_gateway" {
     disk_size_gb         = 32
   }
 
-  # Ubuntu 22.04 LTS (Firezone recommended)
+  # Ubuntu 22.04 LTS (Firezone recommended) - Generation 1 for A-series compatibility
   source_image_reference {
     publisher = "Canonical"
     offer     = "0001-com-ubuntu-server-jammy"
-    sku       = "22_04-lts-gen2"
+    sku       = "22_04-lts"
     version   = "latest"
   }
 
