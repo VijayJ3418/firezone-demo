@@ -49,7 +49,7 @@ variable "ssh_public_key" {
 
 variable "jenkins_vm_size" {
   type        = string
-  default     = "Standard_D2s_v3"
+  default     = "Standard_B1ms"
   description = "Size of the Jenkins VM"
 }
 

@@ -93,7 +93,7 @@ module "azure_firezone_multi_region" {
   secondary_vnet_name           = module.azure_core_infrastructure_secondary[0].spoke_virtual_network.name
   secondary_vnet_id             = module.azure_core_infrastructure_secondary[0].spoke_virtual_network.id
   secondary_subnet_name         = module.azure_core_infrastructure_secondary[0].vpn_subnet.name
-  vm_size                       = "Standard_D2s_v3"
+  vm_size                       = "Standard_B1ms"
   ssh_public_key                = var.ssh_public_key
   firezone_token                = var.firezone_token
   tags                          = var.tags
