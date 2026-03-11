@@ -38,7 +38,7 @@ resource "azurerm_subnet" "gateway_subnet" {
 
 # Network Security Group for Hub
 resource "azurerm_network_security_group" "hub_nsg" {
-  name                = "${var.name_prefix}hub-nsg"
+  name                = "${var.name_prefix}hub-nsg-v2"
   location            = azurerm_resource_group.networking_global.location
   resource_group_name = azurerm_resource_group.networking_global.name
   tags                = var.tags
