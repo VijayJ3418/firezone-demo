@@ -47,7 +47,7 @@ variable "ssh_public_key" {
 
 variable "os_disk_type" {
   type        = string
-  default     = "Premium_LRS"
+  default     = "Standard_LRS"
   description = "Type of OS disk (Premium_LRS, Standard_LRS, StandardSSD_LRS)"
   
   validation {
@@ -64,7 +64,7 @@ variable "os_disk_size_gb" {
 
 variable "data_disk_type" {
   type        = string
-  default     = "Premium_LRS"
+  default     = "Standard_LRS"
   description = "Type of data disk for Jenkins data"
   
   validation {
