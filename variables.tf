@@ -39,7 +39,7 @@ variable "enable_bastion" {
 variable "enable_vpn_gateway" {
   type        = bool
   default     = false
-  description = "Whether to create VPN Gateway"
+  description = "Whether to create VPN Gateway (disabled to avoid provider issues)"
 }
 
 variable "enable_hub_peering" {

@@ -26,14 +26,22 @@ resource "azurerm_subnet" "subnet_vpn" {
   resource_group_name  = azurerm_resource_group.networking_global.name
   virtual_network_name = azurerm_virtual_network.vpc_hub.name
   address_prefixes     = [var.vpn_subnet_cidr]
+
+  depends_on = [azurerm_virtual_network.vpc_hub]
 }
 
-# Gateway Subnet for VPN Gateway (required by Azure)
+# Gateway Subnet for VPN Gateway (required by Azure) - Only create if VPN gateway enabled
 resource "azurerm_subnet" "gateway_subnet" {
+  count                = var.enable_vpn_gateway ? 1 : 0
   name                 = "GatewaySubnet"  # Must be exactly "GatewaySubnet"
   resource_group_name  = azurerm_resource_group.networking_global.name
   virtual_network_name = azurerm_virtual_network.vpc_hub.name
   address_prefixes     = [var.gateway_subnet_cidr]
+
+  depends_on = [
+    azurerm_virtual_network.vpc_hub,
+    azurerm_subnet.subnet_vpn
+  ]
 }
 
 # Network Security Group for Hub
@@ -77,7 +85,8 @@ resource "azurerm_subnet_network_security_group_association" "vpn_subnet_nsg" {
 
   depends_on = [
     azurerm_subnet.subnet_vpn,
-    azurerm_network_security_group.hub_nsg
+    azurerm_network_security_group.hub_nsg,
+    azurerm_virtual_network.vpc_hub
   ]
 }
 

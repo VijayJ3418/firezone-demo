@@ -28,12 +28,12 @@ output "vpn_subnet" {
 }
 
 output "gateway_subnet" {
-  description = "Gateway subnet information"
-  value = {
-    name             = azurerm_subnet.gateway_subnet.name
-    id               = azurerm_subnet.gateway_subnet.id
-    address_prefixes = azurerm_subnet.gateway_subnet.address_prefixes
-  }
+  description = "Gateway subnet information (if VPN gateway enabled)"
+  value = var.enable_vpn_gateway ? {
+    name             = azurerm_subnet.gateway_subnet[0].name
+    id               = azurerm_subnet.gateway_subnet[0].id
+    address_prefixes = azurerm_subnet.gateway_subnet[0].address_prefixes
+  } : null
 }
 
 output "network_security_group" {
