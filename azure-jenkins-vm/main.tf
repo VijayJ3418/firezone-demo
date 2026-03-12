@@ -82,11 +82,11 @@ resource "azurerm_linux_virtual_machine" "jenkins_vm" {
     disk_size_gb         = var.os_disk_size_gb
   }
 
-  # Ubuntu 22.04 LTS (Free from Canonical) - Generation 2 for B-series compatibility
+  # Ubuntu 22.04 LTS (Free from Canonical) - Generation 1 for D-series compatibility
   source_image_reference {
     publisher = "Canonical"
     offer     = "0001-com-ubuntu-server-jammy"
-    sku       = "22_04-lts-gen2"
+    sku       = "22_04-lts"
     version   = "latest"
   }
 

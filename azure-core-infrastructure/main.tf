@@ -115,6 +115,11 @@ resource "azurerm_network_security_group" "jenkins_nsg" {
 resource "azurerm_subnet_network_security_group_association" "jenkins_subnet_nsg" {
   subnet_id                 = azurerm_subnet.subnet_jenkins.id
   network_security_group_id = azurerm_network_security_group.jenkins_nsg.id
+
+  depends_on = [
+    azurerm_subnet.subnet_jenkins,
+    azurerm_network_security_group.jenkins_nsg
+  ]
 }
 
 # Network Security Group for Application Gateway
@@ -168,6 +173,11 @@ resource "azurerm_network_security_group" "appgw_nsg" {
 resource "azurerm_subnet_network_security_group_association" "appgw_subnet_nsg" {
   subnet_id                 = azurerm_subnet.subnet_appgw.id
   network_security_group_id = azurerm_network_security_group.appgw_nsg.id
+
+  depends_on = [
+    azurerm_subnet.subnet_appgw,
+    azurerm_network_security_group.appgw_nsg
+  ]
 }
 
 # VNet Peering from Spoke to Hub
@@ -213,6 +223,11 @@ resource "azurerm_private_dns_zone_virtual_network_link" "spoke_dns_link" {
   virtual_network_id    = azurerm_virtual_network.vpc_spoke.id
   registration_enabled  = false
   tags                  = var.tags
+
+  depends_on = [
+    azurerm_private_dns_zone.jenkins_dns,
+    azurerm_virtual_network.vpc_spoke
+  ]
 }
 
 # Link DNS Zone to Hub VNet (if peering enabled) - ENABLED FOR EXERCISE REQUIREMENTS
@@ -224,4 +239,8 @@ resource "azurerm_private_dns_zone_virtual_network_link" "hub_dns_link" {
   virtual_network_id    = var.hub_vnet_id
   registration_enabled  = false
   tags                  = var.tags
+
+  depends_on = [
+    azurerm_private_dns_zone.jenkins_dns
+  ]
 }
