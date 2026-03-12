@@ -24,7 +24,9 @@ variable "subnet_name" {
 
 variable "vm_size" {
   type        = string
-  default     = "Standard_B2s"
+  default     = "Standard_A1_v2"
+  description = "Size of the Firezone gateway VM (A1_v2 for free trial compatibility)"
+}
   description = "Size of the Firezone gateway VM"
 }
 

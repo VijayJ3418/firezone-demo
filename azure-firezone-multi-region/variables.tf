@@ -65,7 +65,9 @@ variable "secondary_subnet_name" {
 # VM Configuration
 variable "vm_size" {
   type        = string
-  default     = "Standard_B1s"
+  default     = "Standard_A1_v2"
+  description = "Size of the Firezone gateway VMs (A1_v2 for free trial compatibility)"
+}
   description = "Size of the Firezone gateway VMs"
 }
 

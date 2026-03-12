@@ -23,7 +23,7 @@ enable_vpn_gateway = false
 enable_hub_peering = true
 
 # Jenkins Configuration
-jenkins_vm_size   = "Standard_B1s"  # Changed to working VM size
+jenkins_vm_size   = "Standard_A1_v2"  # Free trial compatible VM size
 jenkins_static_ip = "192.168.129.50"
 jenkins_fqdn      = "jenkins.np.dglearn.online"
 

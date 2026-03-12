@@ -30,8 +30,8 @@ variable "vm_name" {
 
 variable "vm_size" {
   type        = string
-  default     = "Standard_D2s_v3"
-  description = "Size of the Jenkins VM (equivalent to GCP e2-standard-2)"
+  default     = "Standard_A1_v2"
+  description = "Size of the Jenkins VM (A1_v2 is commonly available in free trial)"
 }
 
 variable "admin_username" {
@@ -47,8 +47,8 @@ variable "ssh_public_key" {
 
 variable "os_disk_type" {
   type        = string
-  default     = "Premium_LRS"
-  description = "Type of OS disk (Premium_LRS, Standard_LRS, StandardSSD_LRS)"
+  default     = "Standard_LRS"
+  description = "Type of OS disk (Standard_LRS for cost optimization in free trial)"
   
   validation {
     condition     = contains(["Premium_LRS", "Standard_LRS", "StandardSSD_LRS"], var.os_disk_type)
@@ -64,8 +64,8 @@ variable "os_disk_size_gb" {
 
 variable "data_disk_type" {
   type        = string
-  default     = "Premium_LRS"
-  description = "Type of data disk for Jenkins data"
+  default     = "Standard_LRS"
+  description = "Type of data disk for Jenkins data (Standard_LRS for cost optimization)"
   
   validation {
     condition     = contains(["Premium_LRS", "Standard_LRS", "StandardSSD_LRS"], var.data_disk_type)

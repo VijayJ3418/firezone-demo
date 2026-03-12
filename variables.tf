@@ -55,8 +55,8 @@ variable "ssh_public_key" {
 
 variable "jenkins_vm_size" {
   type        = string
-  default     = "Standard_B1s"
-  description = "Size of the Jenkins VM"
+  default     = "Standard_A1_v2"
+  description = "Size of the Jenkins VM (A1_v2 is commonly available in free trial)"
 }
 
 variable "jenkins_static_ip" {
@@ -67,7 +67,7 @@ variable "jenkins_static_ip" {
 
 variable "secondary_region" {
   type        = string
-  default     = "West US 2"
+  default     = "East US"
   description = "Secondary Azure region for multi-region deployment"
 }
 
