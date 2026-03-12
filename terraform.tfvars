@@ -25,8 +25,8 @@ enable_hub_peering    = true   # Enable hub-spoke peering as per exercise
 enable_bastion        = false  # Disabled to save costs
 enable_vpn_gateway    = false  # Disabled to save costs
 
-# Multi-Region Configuration - TEMPORARILY DISABLED FOR STATE CLEANUP (STEP 1)
-enable_firezone_multi_region = false
+# Multi-Region Configuration - STEP 2: RE-ENABLE AFTER STATE CLEANUP
+enable_firezone_multi_region = true
 secondary_region             = "Central US"  # Same region for Load Balancer compatibility
 secondary_spoke_address_space = "10.168.0.0/16"
 secondary_vpn_subnet_cidr    = "10.168.130.0/24"
