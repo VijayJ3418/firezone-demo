@@ -40,7 +40,7 @@ dns_zone_name     = "dglearn.online"
 firezone_token = ""  # Set this when enabling Firezone
 
 # SSH Key - REPLACE WITH YOUR ACTUAL PUBLIC KEY
-ssh_public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC... your-public-key-here"
+ssh_public_key = "REPLACE_WITH_YOUR_SSH_PUBLIC_KEY"
 
 # Tags
 tags = {
