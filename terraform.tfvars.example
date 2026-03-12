@@ -3,7 +3,7 @@
 
 # Basic Configuration
 name_prefix = "vijay-"
-location    = "West US 2"  # Changed to working region
+location    = "East US"  # Changed to East US for better free trial availability
 
 # Network Configuration
 hub_address_space   = "172.16.0.0/16"
@@ -23,7 +23,7 @@ enable_vpn_gateway = false
 enable_hub_peering = true
 
 # Jenkins Configuration
-jenkins_vm_size   = "Standard_A1_v2"  # Free trial compatible VM size
+jenkins_vm_size   = "Standard_B1ls"  # Most commonly available in free trial (1 vCPU, 0.5GB RAM)
 jenkins_static_ip = "192.168.129.50"
 jenkins_fqdn      = "jenkins.np.dglearn.online"
 
@@ -31,7 +31,7 @@ jenkins_fqdn      = "jenkins.np.dglearn.online"
 dns_zone_name = "dglearn.online"
 
 # Multi-region Configuration (for future Firezone deployment)
-secondary_region              = "East US"
+secondary_region              = "West US 2"
 secondary_spoke_address_space = "10.168.0.0/16"
 secondary_vpn_subnet_cidr     = "10.168.130.0/24"
 enable_firezone_multi_region  = false

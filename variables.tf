@@ -8,8 +8,8 @@ variable "name_prefix" {
 
 variable "location" {
   type        = string
-  default     = "West US 2"
-  description = "Azure region for deployment"
+  default     = "East US"
+  description = "Azure region for deployment (East US has better free trial availability)"
 }
 
 variable "hub_address_space" {
@@ -55,8 +55,8 @@ variable "ssh_public_key" {
 
 variable "jenkins_vm_size" {
   type        = string
-  default     = "Standard_A1_v2"
-  description = "Size of the Jenkins VM (A1_v2 is commonly available in free trial)"
+  default     = "Standard_B1ls"
+  description = "Size of the Jenkins VM (B1ls is most commonly available in free trial)"
 }
 
 variable "jenkins_static_ip" {
@@ -67,7 +67,7 @@ variable "jenkins_static_ip" {
 
 variable "secondary_region" {
   type        = string
-  default     = "East US"
+  default     = "West US 2"
   description = "Secondary Azure region for multi-region deployment"
 }
 
