@@ -74,22 +74,22 @@ module "azure_jenkins_vm" {
 }
 
 # Secondary Region Infrastructure for Firezone - DISABLED (using same region for Load Balancer)
-module "azure_core_infrastructure_secondary" {
-  count  = false ? 1 : 0  # Disabled - both gateways deploy in same region
-  source = "./azure-core-infrastructure-secondary"
+# module "azure_core_infrastructure_secondary" {
+#   count  = false ? 1 : 0  # Disabled - both gateways deploy in same region
+#   source = "./azure-core-infrastructure-secondary"
 
-  name_prefix                  = var.name_prefix
-  location                    = var.secondary_region
-  spoke_address_space         = var.secondary_spoke_address_space
-  vpn_subnet_cidr             = var.secondary_vpn_subnet_cidr
-  enable_primary_peering      = true
-  primary_vnet_id             = module.azure_core_infrastructure.spoke_virtual_network.id
-  primary_resource_group_name = module.azure_core_infrastructure.resource_group.name
-  primary_vnet_name           = module.azure_core_infrastructure.spoke_virtual_network.name
-  tags                        = var.tags
+#   name_prefix                  = var.name_prefix
+#   location                    = var.secondary_region
+#   spoke_address_space         = var.secondary_spoke_address_space
+#   vpn_subnet_cidr             = var.secondary_vpn_subnet_cidr
+#   enable_primary_peering      = true
+#   primary_vnet_id             = module.azure_core_infrastructure.spoke_virtual_network.id
+#   primary_resource_group_name = module.azure_core_infrastructure.resource_group.name
+#   primary_vnet_name           = module.azure_core_infrastructure.spoke_virtual_network.name
+#   tags                        = var.tags
 
-  depends_on = [module.azure_core_infrastructure]
-}
+#   depends_on = [module.azure_core_infrastructure]
+# }
 
 # Multi-Region Firezone VPN Gateway Deployment - ENABLED
 module "azure_firezone_multi_region" {

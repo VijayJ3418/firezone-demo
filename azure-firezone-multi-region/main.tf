@@ -58,6 +58,7 @@ resource "azurerm_public_ip" "firezone_lb_pip" {
   lifecycle {
     prevent_destroy = false
     create_before_destroy = true
+    ignore_changes = [tags]
   }
 }
 
@@ -124,8 +125,8 @@ resource "azurerm_lb_rule" "firezone_health_rule" {
   idle_timeout_in_minutes        = 15
 }
 
-# Backend Address Pool Association - Primary (AZ 1) - RE-ENABLED
-resource "azurerm_lb_backend_address_pool_address" "firezone_primary_backend" {
+# Backend Address Pool Association - Primary (AZ 1) - RENAMED TO AVOID STATE CONFLICT
+resource "azurerm_lb_backend_address_pool_address" "firezone_primary_backend_new" {
   name                    = "firezone-primary-backend"
   backend_address_pool_id = azurerm_lb_backend_address_pool.firezone_backend_pool.id
   virtual_network_id      = var.primary_vnet_id
