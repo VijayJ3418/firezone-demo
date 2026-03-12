@@ -13,7 +13,7 @@ terraform {
 # Data sources
 data "azurerm_client_config" "current" {}
 
-# Primary Firezone Gateway (Availability Zone 1)
+# Primary Firezone Gateway (Instance 1)
 module "firezone_primary" {
   source = "../azure-firezone-gateway"
 
@@ -26,11 +26,10 @@ module "firezone_primary" {
   enable_public_ip   = false  # Use load balancer IP
   firezone_token     = var.firezone_token
   log_level          = var.log_level
-  availability_zone  = "1"    # Deploy in AZ 1
-  tags               = merge(var.tags, { Region = var.primary_region, AZ = "1" })
+  tags               = merge(var.tags, { Region = var.primary_region, Instance = "primary" })
 }
 
-# Secondary Firezone Gateway (Availability Zone 2) - Deploy in same region
+# Secondary Firezone Gateway (Instance 2) - Deploy in same region/subnet
 module "firezone_secondary" {
   source = "../azure-firezone-gateway"
 
@@ -43,8 +42,7 @@ module "firezone_secondary" {
   enable_public_ip   = false  # Use load balancer IP
   firezone_token     = var.firezone_token
   log_level          = var.log_level
-  availability_zone  = "2"    # Deploy in AZ 2
-  tags               = merge(var.tags, { Region = var.primary_region, AZ = "2" })
+  tags               = merge(var.tags, { Region = var.primary_region, Instance = "secondary" })
 }
 
 # Public IP for Load Balancer
