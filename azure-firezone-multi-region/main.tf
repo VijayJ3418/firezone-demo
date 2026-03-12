@@ -149,4 +149,3 @@ resource "azurerm_lb_backend_address_pool_address" "firezone_secondary_backend" 
     azurerm_lb_backend_address_pool.firezone_backend_pool
   ]
 }
-}
