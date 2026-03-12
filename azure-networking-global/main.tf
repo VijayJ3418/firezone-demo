@@ -78,17 +78,17 @@ resource "azurerm_network_security_group" "hub_nsg" {
   }
 }
 
-# Associate NSG with VPN subnet
-resource "azurerm_subnet_network_security_group_association" "vpn_subnet_nsg" {
-  subnet_id                 = azurerm_subnet.subnet_vpn.id
-  network_security_group_id = azurerm_network_security_group.hub_nsg.id
+# Associate NSG with VPN subnet - Disabled temporarily to avoid timing issues
+# resource "azurerm_subnet_network_security_group_association" "vpn_subnet_nsg" {
+#   subnet_id                 = azurerm_subnet.subnet_vpn.id
+#   network_security_group_id = azurerm_network_security_group.hub_nsg.id
 
-  depends_on = [
-    azurerm_subnet.subnet_vpn,
-    azurerm_network_security_group.hub_nsg,
-    azurerm_virtual_network.vpc_hub
-  ]
-}
+#   depends_on = [
+#     azurerm_subnet.subnet_vpn,
+#     azurerm_network_security_group.hub_nsg,
+#     azurerm_virtual_network.vpc_hub
+#   ]
+# }
 
 # Public IP for VPN Gateway
 resource "azurerm_public_ip" "vpn_gateway_pip" {
