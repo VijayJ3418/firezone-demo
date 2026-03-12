@@ -30,8 +30,8 @@ variable "vm_name" {
 
 variable "vm_size" {
   type        = string
-  default     = "Standard_F1s"
-  description = "Size of the Jenkins VM (F1s is often available when B-series is not)"
+  default     = "Standard_A1"
+  description = "Size of the Jenkins VM (A1 is more available than DS1_v2 in free trials)"
 }
 
 variable "admin_username" {
