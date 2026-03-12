@@ -6,7 +6,7 @@ name_prefix = "vijay-"
 location    = "East US"  # Changed from Central US to East US where networking exists
 
 # VM Configuration - Free Trial Optimized
-jenkins_vm_size = "Standard_A1"  # Changed from DS1_v2 to A1 for better availability
+jenkins_vm_size = "Standard_B1ms"  # B1ms is often available in free trials
 
 # Network Configuration
 hub_address_space     = "172.16.0.0/16"

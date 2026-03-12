@@ -55,8 +55,8 @@ variable "ssh_public_key" {
 
 variable "jenkins_vm_size" {
   type        = string
-  default     = "Standard_A1"
-  description = "Size of the Jenkins VM (A1 often more available than DS1_v2 in free trials)"
+  default     = "Standard_B1ms"
+  description = "Size of the Jenkins VM (B1ms is often available in free trials)"
 }
 
 variable "jenkins_static_ip" {
