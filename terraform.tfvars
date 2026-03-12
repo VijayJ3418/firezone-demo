@@ -21,7 +21,7 @@ gateway_subnet_cidr   = "172.16.1.0/24"
 bastion_subnet_cidr   = "172.16.2.0/24"
 
 # Feature Flags
-enable_hub_peering    = true
+enable_hub_peering    = false  # Disabled for standalone deployment
 enable_bastion        = false  # Disabled to save costs
 enable_vpn_gateway    = false  # Disabled to save costs
 
