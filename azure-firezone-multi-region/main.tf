@@ -1,5 +1,5 @@
 # Multi-Region Firezone Gateway Deployment with Load Balancer
-# Deploys Firezone gateways in two regions with Azure Load Balancer
+# Modified to deploy both gateways in same region (different AZs) for Load Balancer compatibility
 
 terraform {
   required_providers {
@@ -13,7 +13,7 @@ terraform {
 # Data sources
 data "azurerm_client_config" "current" {}
 
-# Primary Region Firezone Gateway
+# Primary Firezone Gateway (Availability Zone 1)
 module "firezone_primary" {
   source = "../azure-firezone-gateway"
 
@@ -26,23 +26,25 @@ module "firezone_primary" {
   enable_public_ip   = false  # Use load balancer IP
   firezone_token     = var.firezone_token
   log_level          = var.log_level
-  tags               = merge(var.tags, { Region = var.primary_region })
+  availability_zone  = "1"    # Deploy in AZ 1
+  tags               = merge(var.tags, { Region = var.primary_region, AZ = "1" })
 }
 
-# Secondary Region Firezone Gateway
+# Secondary Firezone Gateway (Availability Zone 2) - Deploy in same region
 module "firezone_secondary" {
   source = "../azure-firezone-gateway"
 
   name_prefix         = "${var.name_prefix}secondary-"
-  resource_group_name = var.secondary_resource_group_name
-  vnet_name          = var.secondary_vnet_name
-  subnet_name        = var.secondary_subnet_name
+  resource_group_name = var.primary_resource_group_name  # Same region/RG
+  vnet_name          = var.primary_vnet_name             # Same VNet
+  subnet_name        = var.primary_subnet_name           # Same subnet
   vm_size            = var.vm_size
   ssh_public_key     = var.ssh_public_key
   enable_public_ip   = false  # Use load balancer IP
   firezone_token     = var.firezone_token
   log_level          = var.log_level
-  tags               = merge(var.tags, { Region = var.secondary_region })
+  availability_zone  = "2"    # Deploy in AZ 2
+  tags               = merge(var.tags, { Region = var.primary_region, AZ = "2" })
 }
 
 # Public IP for Load Balancer
@@ -52,6 +54,7 @@ resource "azurerm_public_ip" "firezone_lb_pip" {
   resource_group_name = var.primary_resource_group_name
   allocation_method   = "Static"
   sku                 = "Standard"
+  zones               = ["1", "2"]  # Zone redundant
   tags                = var.tags
 }
 
@@ -114,7 +117,7 @@ resource "azurerm_lb_rule" "firezone_health_rule" {
   idle_timeout_in_minutes        = 15
 }
 
-# Backend Address Pool Association - Primary
+# Backend Address Pool Association - Primary (AZ 1)
 resource "azurerm_lb_backend_address_pool_address" "firezone_primary_backend" {
   name                    = "firezone-primary-backend"
   backend_address_pool_id = azurerm_lb_backend_address_pool.firezone_backend_pool.id
@@ -122,10 +125,10 @@ resource "azurerm_lb_backend_address_pool_address" "firezone_primary_backend" {
   ip_address              = module.firezone_primary.firezone_gateway.private_ip_address
 }
 
-# Backend Address Pool Association - Secondary
+# Backend Address Pool Association - Secondary (AZ 2)
 resource "azurerm_lb_backend_address_pool_address" "firezone_secondary_backend" {
   name                    = "firezone-secondary-backend"
   backend_address_pool_id = azurerm_lb_backend_address_pool.firezone_backend_pool.id
-  virtual_network_id      = var.secondary_vnet_id
+  virtual_network_id      = var.primary_vnet_id  # Same VNet now
   ip_address              = module.firezone_secondary.firezone_gateway.private_ip_address
 }

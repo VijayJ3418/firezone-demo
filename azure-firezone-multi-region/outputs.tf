@@ -11,24 +11,26 @@ output "load_balancer" {
 }
 
 output "firezone_primary" {
-  description = "Primary Firezone gateway information"
+  description = "Primary Firezone gateway information (AZ 1)"
   value = {
     vm_id             = module.firezone_primary.firezone_gateway.id
     vm_name           = module.firezone_primary.firezone_gateway.name
     private_ip        = module.firezone_primary.firezone_gateway.private_ip_address
     region            = var.primary_region
+    availability_zone = "1"
     resource_group    = var.primary_resource_group_name
   }
 }
 
 output "firezone_secondary" {
-  description = "Secondary Firezone gateway information"
+  description = "Secondary Firezone gateway information (AZ 2)"
   value = {
     vm_id             = module.firezone_secondary.firezone_gateway.id
     vm_name           = module.firezone_secondary.firezone_gateway.name
     private_ip        = module.firezone_secondary.firezone_gateway.private_ip_address
-    region            = var.secondary_region
-    resource_group    = var.secondary_resource_group_name
+    region            = var.primary_region
+    availability_zone = "2"
+    resource_group    = var.primary_resource_group_name
   }
 }
 
@@ -40,5 +42,6 @@ output "firezone_access_info" {
     primary_gateway_ip    = module.firezone_primary.firezone_gateway.private_ip_address
     secondary_gateway_ip  = module.firezone_secondary.firezone_gateway.private_ip_address
     load_balancer_ip      = azurerm_public_ip.firezone_lb_pip.ip_address
+    high_availability     = "Zone-redundant deployment in ${var.primary_region}"
   }
 }
