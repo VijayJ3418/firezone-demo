@@ -3,7 +3,7 @@
 
 # Basic Configuration
 name_prefix = "vijay-"
-location    = "East US"  # Changed to East US for better free trial availability
+location    = "Central US"  # Changed to Central US for better VM availability
 
 # Network Configuration
 hub_address_space   = "172.16.0.0/16"
@@ -23,7 +23,7 @@ enable_vpn_gateway = false
 enable_hub_peering = true
 
 # Jenkins Configuration
-jenkins_vm_size   = "Standard_B1ls"  # Most commonly available in free trial (1 vCPU, 0.5GB RAM)
+jenkins_vm_size   = "Standard_F1s"  # F-series often available when B-series is not (1 vCPU, 2GB RAM)
 jenkins_static_ip = "192.168.129.50"
 jenkins_fqdn      = "jenkins.np.dglearn.online"
 
