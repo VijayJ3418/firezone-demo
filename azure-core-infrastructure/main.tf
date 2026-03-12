@@ -208,13 +208,13 @@ resource "azurerm_private_dns_zone_virtual_network_link" "spoke_dns_link" {
   tags                  = var.tags
 }
 
-# Link DNS Zone to Hub VNet (if peering enabled)
-resource "azurerm_private_dns_zone_virtual_network_link" "hub_dns_link" {
-  count                 = var.enable_hub_peering ? 1 : 0
-  name                  = "hub-dns-link"
-  resource_group_name   = azurerm_resource_group.core_infrastructure.name
-  private_dns_zone_name = azurerm_private_dns_zone.jenkins_dns.name
-  virtual_network_id    = var.hub_vnet_id
-  registration_enabled  = false
-  tags                  = var.tags
-}
+# Link DNS Zone to Hub VNet (if peering enabled) - DISABLED FOR STANDALONE DEPLOYMENT
+# resource "azurerm_private_dns_zone_virtual_network_link" "hub_dns_link" {
+#   count                 = var.enable_hub_peering ? 1 : 0
+#   name                  = "hub-dns-link"
+#   resource_group_name   = azurerm_resource_group.core_infrastructure.name
+#   private_dns_zone_name = azurerm_private_dns_zone.jenkins_dns.name
+#   virtual_network_id    = var.hub_vnet_id
+#   registration_enabled  = false
+#   tags                  = var.tags
+# }
