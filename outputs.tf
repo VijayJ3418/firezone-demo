@@ -1,22 +1,23 @@
 # Azure Jenkins Infrastructure - Root Outputs
 
-output "hub_network" {
-  description = "Hub network information"
-  value       = module.azure_networking_global
-}
+# Hub Network Output - Temporarily disabled until module is initialized
+# output "hub_network" {
+#   description = "Hub network information"
+#   value       = module.azure_networking_global
+# }
 
-# STEP 2: SPOKE NETWORK OUTPUT - ENABLED
+# Spoke Network Output - Always available
 output "spoke_network" {
   description = "Spoke network information"
   value       = module.azure_core_infrastructure
 }
 
-# STEP 3: JENKINS VM OUTPUT - DISABLED TEMPORARILY
-# output "jenkins_vm" {
-#   description = "Jenkins VM information"
-#   value       = module.azure_jenkins_vm
-#   sensitive   = true
-# }
+# Jenkins VM Output - Enabled
+output "jenkins_vm" {
+  description = "Jenkins VM information"
+  value       = module.azure_jenkins_vm
+  sensitive   = true
+}
 
 # Firezone Multi-Region Outputs - DISABLED TEMPORARILY
 # output "firezone_multi_region" {
@@ -35,11 +36,14 @@ output "spoke_network" {
 #   value       = module.azure_jenkins_appgw
 # }
 
-# output "jenkins_access_info" {
-#   description = "Information for accessing Jenkins"
-#   value = {
-#     jenkins_url           = "https://${var.jenkins_fqdn}"
-#     application_gateway_ip = var.jenkins_static_ip
-#     bastion_access        = module.azure_networking_global.bastion_host
-#   }
-# }
+# Jenkins Access Information
+output "jenkins_access_info" {
+  description = "Information for accessing Jenkins"
+  value = {
+    jenkins_private_ip    = module.azure_jenkins_vm.jenkins_vm.private_ip_address
+    jenkins_subnet        = module.azure_core_infrastructure.jenkins_subnet.name
+    resource_group        = module.azure_core_infrastructure.resource_group.name
+    ssh_command          = "ssh azureuser@${module.azure_jenkins_vm.jenkins_vm.private_ip_address}"
+    jenkins_url          = "http://${module.azure_jenkins_vm.jenkins_vm.private_ip_address}:8080"
+  }
+}
