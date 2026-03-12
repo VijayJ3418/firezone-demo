@@ -110,6 +110,7 @@ module "azure_firezone_multi_region" {
   vm_size                       = "Standard_D2s_v3"
   ssh_public_key                = var.ssh_public_key
   firezone_token                = var.firezone_token
+  log_level                     = var.firezone_log_level
   tags                          = var.tags
 
   depends_on = [

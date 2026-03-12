@@ -102,6 +102,17 @@ variable "firezone_token" {
   sensitive   = true
 }
 
+variable "firezone_log_level" {
+  type        = string
+  default     = "info"
+  description = "Log level for Firezone gateways (debug, info, warn, error)"
+  
+  validation {
+    condition     = contains(["debug", "info", "warn", "error"], var.firezone_log_level)
+    error_message = "Log level must be one of: debug, info, warn, error."
+  }
+}
+
 variable "enable_firezone_multi_region" {
   type        = bool
   default     = false
