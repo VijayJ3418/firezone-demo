@@ -68,8 +68,6 @@ variable "vm_size" {
   default     = "Standard_A1_v2"
   description = "Size of the Firezone gateway VMs (A1_v2 for free trial compatibility)"
 }
-  description = "Size of the Firezone gateway VMs"
-}
 
 variable "ssh_public_key" {
   type        = string

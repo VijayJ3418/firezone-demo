@@ -27,8 +27,6 @@ variable "vm_size" {
   default     = "Standard_A1_v2"
   description = "Size of the Firezone gateway VM (A1_v2 for free trial compatibility)"
 }
-  description = "Size of the Firezone gateway VM"
-}
 
 variable "admin_username" {
   type        = string
