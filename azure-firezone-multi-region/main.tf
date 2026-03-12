@@ -54,6 +54,11 @@ resource "azurerm_public_ip" "firezone_lb_pip" {
   sku                 = "Standard"
   zones               = ["1", "2"]  # Zone redundant
   tags                = var.tags
+
+  lifecycle {
+    prevent_destroy = false
+    create_before_destroy = true
+  }
 }
 
 # Load Balancer for Firezone Gateways
@@ -68,6 +73,10 @@ resource "azurerm_lb" "firezone_lb" {
     name                 = "firezone-frontend"
     public_ip_address_id = azurerm_public_ip.firezone_lb_pip.id
   }
+
+  depends_on = [
+    azurerm_public_ip.firezone_lb_pip
+  ]
 }
 
 # Backend Address Pool for Firezone Gateways
@@ -121,6 +130,11 @@ resource "azurerm_lb_backend_address_pool_address" "firezone_primary_backend" {
   backend_address_pool_id = azurerm_lb_backend_address_pool.firezone_backend_pool.id
   virtual_network_id      = var.primary_vnet_id
   ip_address              = module.firezone_primary.firezone_gateway.private_ip_address
+
+  depends_on = [
+    module.firezone_primary,
+    azurerm_lb_backend_address_pool.firezone_backend_pool
+  ]
 }
 
 # Backend Address Pool Association - Secondary (AZ 2)
@@ -129,4 +143,10 @@ resource "azurerm_lb_backend_address_pool_address" "firezone_secondary_backend" 
   backend_address_pool_id = azurerm_lb_backend_address_pool.firezone_backend_pool.id
   virtual_network_id      = var.primary_vnet_id  # Same VNet now
   ip_address              = module.firezone_secondary.firezone_gateway.private_ip_address
+
+  depends_on = [
+    module.firezone_secondary,
+    azurerm_lb_backend_address_pool.firezone_backend_pool
+  ]
+}
 }
