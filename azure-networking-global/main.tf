@@ -38,7 +38,7 @@ resource "azurerm_subnet" "gateway_subnet" {
 
 # Network Security Group for Hub
 resource "azurerm_network_security_group" "hub_nsg" {
-  name                = "${var.name_prefix}hub-nsg-v3"
+  name                = "${var.name_prefix}hub-nsg-v5"
   location            = azurerm_resource_group.networking_global.location
   resource_group_name = azurerm_resource_group.networking_global.name
   tags                = var.tags
@@ -65,19 +65,6 @@ resource "azurerm_network_security_group" "hub_nsg" {
     protocol                   = "Udp"
     source_port_range          = "*"
     destination_port_range     = "51820"
-    source_address_prefix      = "*"
-    destination_address_prefix = "*"
-  }
-
-  # Allow HTTPS
-  security_rule {
-    name                       = "AllowHTTPS"
-    priority                   = 1200
-    direction                  = "Inbound"
-    access                     = "Allow"
-    protocol                   = "Tcp"
-    source_port_range          = "*"
-    destination_port_range     = "443"
     source_address_prefix      = "*"
     destination_address_prefix = "*"
   }
