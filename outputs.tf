@@ -27,8 +27,8 @@ output "firezone_multi_region" {
 }
 
 output "secondary_infrastructure" {
-  description = "Secondary region infrastructure information for Firezone"
-  value       = var.enable_firezone_multi_region ? module.azure_core_infrastructure_secondary[0] : null
+  description = "Secondary region infrastructure information for Firezone - DISABLED (using same region)"
+  value       = null  # Disabled since both gateways deploy in same region
 }
 
 # output "application_gateway" {
