@@ -20,8 +20,8 @@ hub_vpn_subnet_cidr   = "172.16.0.0/24"
 gateway_subnet_cidr   = "172.16.1.0/24"
 bastion_subnet_cidr   = "172.16.2.0/24"
 
-# Feature Flags
-enable_hub_peering    = false  # Disabled for standalone deployment
+# Feature Flags - RESTORED FOR ORIGINAL EXERCISE
+enable_hub_peering    = true   # Enable hub-spoke peering as per exercise
 enable_bastion        = false  # Disabled to save costs
 enable_vpn_gateway    = false  # Disabled to save costs
 

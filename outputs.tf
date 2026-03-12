@@ -1,10 +1,10 @@
 # Azure Jenkins Infrastructure - Root Outputs
 
-# Hub Network Output - Temporarily disabled until module is initialized
-# output "hub_network" {
-#   description = "Hub network information"
-#   value       = module.azure_networking_global
-# }
+# Hub Network Output - ENABLED FOR EXERCISE REQUIREMENTS
+output "hub_network" {
+  description = "Hub network information"
+  value       = module.azure_networking_global
+}
 
 # Spoke Network Output - Always available
 output "spoke_network" {

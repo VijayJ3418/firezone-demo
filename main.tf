@@ -19,24 +19,24 @@ provider "azurerm" {
   }
 }
 
-# Hub Network Module - DISABLED FOR SIMPLIFIED DEPLOYMENT
-# module "azure_networking_global" {
-#   source = "./azure-networking-global"
+# Hub Network Module - ENABLED FOR ORIGINAL EXERCISE REQUIREMENTS
+module "azure_networking_global" {
+  source = "./azure-networking-global"
 
-#   name_prefix            = var.name_prefix
-#   location              = var.location
-#   hub_address_space     = var.hub_address_space
-#   vpn_subnet_cidr       = var.hub_vpn_subnet_cidr
-#   gateway_subnet_cidr   = var.gateway_subnet_cidr
-#   bastion_subnet_cidr   = var.bastion_subnet_cidr
-#   spoke_address_spaces  = [var.spoke_address_space, var.secondary_spoke_address_space]
-#   enable_bastion        = var.enable_bastion
-#   enable_vpn_gateway    = var.enable_vpn_gateway
-#   vpn_gateway_sku       = var.vpn_gateway_sku
-#   tags                  = var.tags
-# }
+  name_prefix            = var.name_prefix
+  location              = var.location
+  hub_address_space     = var.hub_address_space
+  vpn_subnet_cidr       = var.hub_vpn_subnet_cidr
+  gateway_subnet_cidr   = var.gateway_subnet_cidr
+  bastion_subnet_cidr   = var.bastion_subnet_cidr
+  spoke_address_spaces  = [var.spoke_address_space, var.secondary_spoke_address_space]
+  enable_bastion        = var.enable_bastion
+  enable_vpn_gateway    = var.enable_vpn_gateway
+  vpn_gateway_sku       = var.vpn_gateway_sku
+  tags                  = var.tags
+}
 
-# Spoke Network Module - STANDALONE DEPLOYMENT (NO HUB DEPENDENCY)
+# Spoke Network Module - WITH HUB PEERING AS PER EXERCISE REQUIREMENTS
 module "azure_core_infrastructure" {
   source = "./azure-core-infrastructure"
 
@@ -47,14 +47,16 @@ module "azure_core_infrastructure" {
   appgw_subnet_cidr       = var.appgw_subnet_cidr
   vpn_subnet_cidr         = var.vpn_subnet_cidr
   hub_address_space       = var.hub_address_space
-  enable_hub_peering      = false  # NO HUB NETWORK
-  hub_vnet_id             = ""
-  hub_resource_group_name = ""
-  hub_vnet_name           = ""
-  hub_has_gateway         = false
+  enable_hub_peering      = var.enable_hub_peering
+  hub_vnet_id             = module.azure_networking_global.hub_virtual_network.id
+  hub_resource_group_name = module.azure_networking_global.resource_group.name
+  hub_vnet_name           = module.azure_networking_global.hub_virtual_network.name
+  hub_has_gateway         = var.enable_vpn_gateway
   use_remote_gateways     = false
   dns_zone_name           = var.dns_zone_name
   tags                    = var.tags
+
+  depends_on = [module.azure_networking_global]
 }
 
 # Jenkins VM Module - ENABLED WITH FREE TRIAL COMPATIBLE VM SIZE
