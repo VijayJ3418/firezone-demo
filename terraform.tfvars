@@ -3,7 +3,7 @@
 
 # Basic Configuration
 name_prefix = "vijay-"
-location    = "East US"  # Changed from Central US to East US where networking exists
+location    = "Central US"  # Changed back to Central US where infrastructure exists
 
 # VM Configuration - Free Trial Optimized
 jenkins_vm_size = "Standard_B1ms"  # B1ms is often available in free trials
@@ -25,9 +25,9 @@ enable_hub_peering    = true   # Enable hub-spoke peering as per exercise
 enable_bastion        = false  # Disabled to save costs
 enable_vpn_gateway    = false  # Disabled to save costs
 
-# Multi-Region Configuration (Disabled for now)
-enable_firezone_multi_region = false
-secondary_region             = "West US 2"
+# Multi-Region Configuration - ENABLED FOR LOAD BALANCER SETUP
+enable_firezone_multi_region = true
+secondary_region             = "Central US"  # Same region for Load Balancer compatibility
 secondary_spoke_address_space = "10.168.0.0/16"
 secondary_vpn_subnet_cidr    = "10.168.130.0/24"
 
@@ -36,8 +36,8 @@ jenkins_static_ip = "192.168.129.50"
 jenkins_fqdn      = "jenkins.np.dglearn.online"
 dns_zone_name     = "dglearn.online"
 
-# VPN Configuration (if needed later)
-firezone_token = ""  # Set this when enabling Firezone
+# VPN Configuration - ENABLED FOR FIREZONE
+firezone_token = "demo-token-for-testing"  # Replace with actual token later
 
 # SSH Key - REPLACE WITH YOUR ACTUAL PUBLIC KEY
 ssh_public_key = "REPLACE_WITH_YOUR_SSH_PUBLIC_KEY"
