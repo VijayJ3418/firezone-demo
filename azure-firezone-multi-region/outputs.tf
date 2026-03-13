@@ -1,4 +1,4 @@
-# Outputs for Multi-Region Firezone Gateway Deployment - TEMPORARY PUBLIC IPs
+# Outputs for Multi-Region Firezone Gateway Deployment - PRIVATE ONLY
 
 output "firezone_primary" {
   description = "Primary Firezone gateway information"
@@ -6,11 +6,10 @@ output "firezone_primary" {
     vm_id             = module.firezone_primary.firezone_gateway.id
     vm_name           = module.firezone_primary.firezone_gateway.name
     private_ip        = module.firezone_primary.firezone_gateway.private_ip_address
-    public_ip         = module.firezone_primary.public_ip != null ? module.firezone_primary.public_ip.ip_address : null
     region            = var.primary_region
     instance          = "primary"
     resource_group    = var.primary_resource_group_name
-    access_method     = "Temporary public IP - will be removed after deployment"
+    access_method     = "VPN-only access - no public IP"
   }
 }
 
@@ -20,11 +19,10 @@ output "firezone_secondary" {
     vm_id             = module.firezone_secondary.firezone_gateway.id
     vm_name           = module.firezone_secondary.firezone_gateway.name
     private_ip        = module.firezone_secondary.firezone_gateway.private_ip_address
-    public_ip         = module.firezone_secondary.public_ip != null ? module.firezone_secondary.public_ip.ip_address : null
     region            = var.primary_region
     instance          = "secondary"
     resource_group    = var.primary_resource_group_name
-    access_method     = "Temporary public IP - will be removed after deployment"
+    access_method     = "VPN-only access - no public IP"
   }
 }
 
@@ -33,25 +31,10 @@ output "firezone_access_info" {
   value = {
     primary_private_ip           = module.firezone_primary.firezone_gateway.private_ip_address
     secondary_private_ip         = module.firezone_secondary.firezone_gateway.private_ip_address
-    primary_public_ip            = module.firezone_primary.public_ip != null ? module.firezone_primary.public_ip.ip_address : null
-    secondary_public_ip          = module.firezone_secondary.public_ip != null ? module.firezone_secondary.public_ip.ip_address : null
-    primary_ssh_command          = module.firezone_primary.public_ip != null ? "ssh azureuser@${module.firezone_primary.public_ip.ip_address}" : "ssh azureuser@${module.firezone_primary.firezone_gateway.private_ip_address}"
-    secondary_ssh_command        = module.firezone_secondary.public_ip != null ? "ssh azureuser@${module.firezone_secondary.public_ip.ip_address}" : "ssh azureuser@${module.firezone_secondary.firezone_gateway.private_ip_address}"
-    deployment_type              = "Temporary public IPs for deployment - will be removed for security"
+    deployment_type              = "Private dual gateway deployment - VPN-only access"
     token_configured             = "Real Firezone token configured"
-    next_step                    = "After successful deployment, disable public IPs for security"
+    access_note                  = "Access resources only through Firezone VPN connection"
+    security_note                = "No public IPs - maximum security configuration"
+    vpn_setup_note              = "Create VPN client in Firezone admin portal to access resources"
   }
 }
-
-# LOAD BALANCER OUTPUTS DISABLED
-# Uncomment if Load Balancer is re-enabled later
-
-# output "load_balancer" {
-#   description = "Firezone load balancer information"
-#   value = {
-#     id                = azurerm_lb.firezone_lb.id
-#     name              = azurerm_lb.firezone_lb.name
-#     public_ip_address = azurerm_public_ip.firezone_lb_pip.ip_address
-#     fqdn              = azurerm_public_ip.firezone_lb_pip.fqdn
-#   }
-# }

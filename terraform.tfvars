@@ -20,14 +20,14 @@ hub_vpn_subnet_cidr   = "172.16.0.0/24"
 gateway_subnet_cidr   = "172.16.1.0/24"
 bastion_subnet_cidr   = "172.16.2.0/24"
 
-# Feature Flags - RESTORED FOR ORIGINAL EXERCISE
+# Feature Flags - UPDATED FOR SECURE VPN-ONLY DEPLOYMENT
 enable_hub_peering    = true   # Enable hub-spoke peering as per exercise
-enable_bastion        = false  # Disabled to save costs
+enable_bastion        = false  # No Bastion - VPN-only access
 enable_vpn_gateway    = false  # Disabled to save costs
 
-# Multi-Region Configuration - STEP 2: RE-ENABLE AFTER STATE CLEANUP
+# Multi-Region Configuration - FIREZONE GATEWAYS ENABLED
 enable_firezone_multi_region = true
-secondary_region             = "Central US"  # Same region for Load Balancer compatibility
+secondary_region             = "Central US"  # Same region for simplicity
 secondary_spoke_address_space = "10.168.0.0/16"
 secondary_vpn_subnet_cidr    = "10.168.130.0/24"
 
