@@ -245,16 +245,16 @@ resource "azurerm_private_dns_zone_virtual_network_link" "hub_dns_link" {
   ]
 }
 
-# Link DNS Zone to Core IT VNet - NEW: Link to Core IT Infrastructure VNet
-resource "azurerm_private_dns_zone_virtual_network_link" "core_it_dns_link" {
-  name                  = "core-it-dns-link"
-  resource_group_name   = azurerm_resource_group.core_infrastructure.name
-  private_dns_zone_name = azurerm_private_dns_zone.jenkins_dns.name
-  virtual_network_id    = "/subscriptions/95fe2b5a-17cb-4b4c-b5ca-36c90e4dfefd/resourceGroups/${var.name_prefix}core-it-infrastructure-rg/providers/Microsoft.Network/virtualNetworks/${var.name_prefix}az-core-it-infra"
-  registration_enabled  = false
-  tags                  = var.tags
+# Link DNS Zone to Core IT VNet - DISABLED: Causing conflicts, will be handled separately
+# resource "azurerm_private_dns_zone_virtual_network_link" "core_it_dns_link" {
+#   name                  = "core-it-dns-link"
+#   resource_group_name   = azurerm_resource_group.core_infrastructure.name
+#   private_dns_zone_name = azurerm_private_dns_zone.jenkins_dns.name
+#   virtual_network_id    = "/subscriptions/95fe2b5a-17cb-4b4c-b5ca-36c90e4dfefd/resourceGroups/${var.name_prefix}core-it-infrastructure-rg/providers/Microsoft.Network/virtualNetworks/${var.name_prefix}az-core-it-infra"
+#   registration_enabled  = false
+#   tags                  = var.tags
 
-  depends_on = [
-    azurerm_private_dns_zone.jenkins_dns
-  ]
-}
+#   depends_on = [
+#     azurerm_private_dns_zone.jenkins_dns
+#   ]
+# }

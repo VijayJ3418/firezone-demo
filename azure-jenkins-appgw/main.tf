@@ -22,9 +22,9 @@ data "azurerm_subnet" "subnet_appgw" {
   resource_group_name  = var.resource_group_name
 }
 
-# Data source to reference existing Jenkins subnet
+# Data source to reference existing Jenkins subnet - FIXED: Use correct subnet name
 data "azurerm_subnet" "subnet_jenkins" {
-  name                 = var.jenkins_subnet_name
+  name                 = "jenkins-subnet"  # Fixed: Core IT Infrastructure uses "jenkins-subnet"
   virtual_network_name = var.vnet_name
   resource_group_name  = var.resource_group_name
 }
@@ -42,7 +42,7 @@ resource "azurerm_public_ip" "appgw_pip" {
 
 # Self-signed certificate for HTTPS (equivalent to GCP SSL certificate)
 resource "azurerm_key_vault" "jenkins_kv" {
-  name                = "${var.name_prefix}jenkins-kv-${random_string.kv_suffix.result}"
+  name                = "kv-${random_string.kv_suffix.result}"  # Fixed: Shorter name to avoid length limit
   location            = data.azurerm_resource_group.core_infrastructure.location
   resource_group_name = data.azurerm_resource_group.core_infrastructure.name
   tenant_id           = data.azurerm_client_config.current.tenant_id
