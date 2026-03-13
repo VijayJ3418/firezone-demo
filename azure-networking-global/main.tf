@@ -56,11 +56,12 @@ resource "azurerm_subnet" "gateway_subnet" {
 
 # Network Security Group for Hub
 resource "azurerm_network_security_group" "hub_nsg" {
-  name                = "${var.name_prefix}hub-nsg-v5"
+  name                = "${var.name_prefix}hub-nsg-v6"
   location            = azurerm_resource_group.networking_global.location
   resource_group_name = azurerm_resource_group.networking_global.name
   tags                = var.tags
 
+  # INBOUND RULES
   # Allow SSH from VirtualNetwork
   security_rule {
     name                       = "AllowSSH"
@@ -74,7 +75,7 @@ resource "azurerm_network_security_group" "hub_nsg" {
     destination_address_prefix = "*"
   }
 
-  # Allow WireGuard/Firezone traffic
+  # Allow WireGuard/Firezone traffic from Internet
   security_rule {
     name                       = "AllowWireGuard"
     priority                   = 1100
@@ -86,19 +87,98 @@ resource "azurerm_network_security_group" "hub_nsg" {
     source_address_prefix      = "*"
     destination_address_prefix = "*"
   }
+
+  # Allow HTTP for health checks
+  security_rule {
+    name                       = "AllowHTTPHealthCheck"
+    priority                   = 1200
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "8080"
+    source_address_prefix      = "VirtualNetwork"
+    destination_address_prefix = "*"
+  }
+
+  # OUTBOUND RULES - CRITICAL FOR INTERNET ACCESS
+  # Allow HTTPS outbound for package downloads and Firezone API
+  security_rule {
+    name                       = "AllowHTTPSOutbound"
+    priority                   = 1000
+    direction                  = "Outbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "443"
+    source_address_prefix      = "*"
+    destination_address_prefix = "Internet"
+  }
+
+  # Allow HTTP outbound for package downloads
+  security_rule {
+    name                       = "AllowHTTPOutbound"
+    priority                   = 1100
+    direction                  = "Outbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "80"
+    source_address_prefix      = "*"
+    destination_address_prefix = "Internet"
+  }
+
+  # Allow DNS outbound
+  security_rule {
+    name                       = "AllowDNSOutbound"
+    priority                   = 1200
+    direction                  = "Outbound"
+    access                     = "Allow"
+    protocol                   = "Udp"
+    source_port_range          = "*"
+    destination_port_range     = "53"
+    source_address_prefix      = "*"
+    destination_address_prefix = "Internet"
+  }
+
+  # Allow all outbound to VirtualNetwork (for inter-VNet communication)
+  security_rule {
+    name                       = "AllowVNetOutbound"
+    priority                   = 1300
+    direction                  = "Outbound"
+    access                     = "Allow"
+    protocol                   = "*"
+    source_port_range          = "*"
+    destination_port_range     = "*"
+    source_address_prefix      = "VirtualNetwork"
+    destination_address_prefix = "VirtualNetwork"
+  }
+
+  # Allow NTP outbound (for time synchronization)
+  security_rule {
+    name                       = "AllowNTPOutbound"
+    priority                   = 1400
+    direction                  = "Outbound"
+    access                     = "Allow"
+    protocol                   = "Udp"
+    source_port_range          = "*"
+    destination_port_range     = "123"
+    source_address_prefix      = "*"
+    destination_address_prefix = "Internet"
+  }
 }
 
-# Associate NSG with VPN subnet - Disabled temporarily to avoid timing issues
-# resource "azurerm_subnet_network_security_group_association" "vpn_subnet_nsg" {
-#   subnet_id                 = azurerm_subnet.subnet_vpn.id
-#   network_security_group_id = azurerm_network_security_group.hub_nsg.id
+# Associate NSG with Firezone subnet
+resource "azurerm_subnet_network_security_group_association" "firezone_subnet_nsg" {
+  subnet_id                 = azurerm_subnet.firezone_subnet.id
+  network_security_group_id = azurerm_network_security_group.hub_nsg.id
 
-#   depends_on = [
-#     azurerm_subnet.subnet_vpn,
-#     azurerm_network_security_group.hub_nsg,
-#     azurerm_virtual_network.vpc_hub
-#   ]
-# }
+  depends_on = [
+    azurerm_subnet.firezone_subnet,
+    azurerm_network_security_group.hub_nsg,
+    azurerm_virtual_network.vpc_hub
+  ]
+}
 
 # Public IP for VPN Gateway
 resource "azurerm_public_ip" "vpn_gateway_pip" {
