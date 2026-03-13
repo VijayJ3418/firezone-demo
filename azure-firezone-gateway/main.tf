@@ -47,6 +47,10 @@ resource "azurerm_network_interface" "firezone_nic" {
     private_ip_address_allocation = "Dynamic"
     public_ip_address_id          = var.enable_public_ip ? azurerm_public_ip.firezone_pip[0].id : null
   }
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 # User Assigned Identity for Firezone Gateway
