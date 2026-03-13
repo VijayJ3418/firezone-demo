@@ -54,9 +54,6 @@ resource "azurerm_network_interface" "firezone_nic" {
 
   lifecycle {
     create_before_destroy = true
-    replace_triggered_by = [
-      var.enable_public_ip
-    ]
   }
 }
 
