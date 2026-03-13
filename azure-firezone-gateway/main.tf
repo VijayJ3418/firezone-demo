@@ -22,7 +22,7 @@ data "azurerm_subnet" "gateway_subnet" {
   resource_group_name  = var.resource_group_name
 }
 
-# Public IP for Firezone Gateway
+# Public IP for Firezone Gateway - CONDITIONAL CREATION
 resource "azurerm_public_ip" "firezone_pip" {
   count               = var.enable_public_ip ? 1 : 0
   name                = "${var.name_prefix}firezone-gateway-pip"
@@ -31,6 +31,10 @@ resource "azurerm_public_ip" "firezone_pip" {
   allocation_method   = "Static"
   sku                 = "Standard"
   tags                = var.tags
+
+  lifecycle {
+    prevent_destroy = false
+  }
 }
 
 # Network Interface for Firezone Gateway
@@ -50,6 +54,9 @@ resource "azurerm_network_interface" "firezone_nic" {
 
   lifecycle {
     create_before_destroy = true
+    replace_triggered_by = [
+      var.enable_public_ip
+    ]
   }
 }
 
