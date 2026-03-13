@@ -20,20 +20,20 @@ resource "azurerm_virtual_network" "vpc_spoke" {
   tags                = var.tags
 }
 
-# Jenkins Subnet (equivalent to subnet-jenkins)
+# Jenkins Subnet (equivalent to subnet-jenkins) - FIXED: Use spoke network ranges
 resource "azurerm_subnet" "subnet_jenkins" {
   name                 = "subnet-jenkins"
   resource_group_name  = azurerm_resource_group.core_infrastructure.name
   virtual_network_name = azurerm_virtual_network.vpc_spoke.name
-  address_prefixes     = [var.jenkins_subnet_cidr]
+  address_prefixes     = ["192.168.1.0/24"]  # Fixed: Use spoke network range
 }
 
-# Application Gateway Subnet (equivalent to proxy-only-subnet)
+# Application Gateway Subnet (equivalent to proxy-only-subnet) - FIXED: Use spoke network ranges
 resource "azurerm_subnet" "subnet_appgw" {
   name                 = "subnet-appgw"
   resource_group_name  = azurerm_resource_group.core_infrastructure.name
   virtual_network_name = azurerm_virtual_network.vpc_spoke.name
-  address_prefixes     = [var.appgw_subnet_cidr]
+  address_prefixes     = ["192.168.2.0/24"]  # Fixed: Use spoke network range
 
   lifecycle {
     ignore_changes = [
@@ -84,7 +84,7 @@ resource "azurerm_network_security_group" "jenkins_nsg" {
     destination_address_prefix = "*"
   }
 
-  # Allow Application Gateway traffic (equivalent to allow-ilb-proxy-traffic)
+  # Allow Application Gateway traffic (equivalent to allow-ilb-proxy-traffic) - FIXED: Use spoke network range
   security_rule {
     name                       = "AllowAppGwTraffic"
     priority                   = 1200
@@ -93,7 +93,7 @@ resource "azurerm_network_security_group" "jenkins_nsg" {
     protocol                   = "Tcp"
     source_port_range          = "*"
     destination_port_ranges    = ["8080", "80"]
-    source_address_prefix      = var.appgw_subnet_cidr
+    source_address_prefix      = "192.168.2.0/24"  # Fixed: Use spoke AppGW subnet
     destination_address_prefix = "*"
   }
 
@@ -237,6 +237,20 @@ resource "azurerm_private_dns_zone_virtual_network_link" "hub_dns_link" {
   resource_group_name   = azurerm_resource_group.core_infrastructure.name
   private_dns_zone_name = azurerm_private_dns_zone.jenkins_dns.name
   virtual_network_id    = var.hub_vnet_id
+  registration_enabled  = false
+  tags                  = var.tags
+
+  depends_on = [
+    azurerm_private_dns_zone.jenkins_dns
+  ]
+}
+
+# Link DNS Zone to Core IT VNet - NEW: Link to Core IT Infrastructure VNet
+resource "azurerm_private_dns_zone_virtual_network_link" "core_it_dns_link" {
+  name                  = "core-it-dns-link"
+  resource_group_name   = azurerm_resource_group.core_infrastructure.name
+  private_dns_zone_name = azurerm_private_dns_zone.jenkins_dns.name
+  virtual_network_id    = "/subscriptions/95fe2b5a-17cb-4b4c-b5ca-36c90e4dfefd/resourceGroups/${var.name_prefix}core-it-infrastructure-rg/providers/Microsoft.Network/virtualNetworks/${var.name_prefix}az-core-it-infra"
   registration_enabled  = false
   tags                  = var.tags
 
