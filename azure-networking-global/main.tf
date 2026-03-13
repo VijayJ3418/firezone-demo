@@ -168,7 +168,7 @@ resource "azurerm_network_security_group" "hub_nsg" {
   }
 }
 
-# Associate NSG with Firezone subnet
+# Associate NSG with Firezone subnet - ENABLED
 resource "azurerm_subnet_network_security_group_association" "firezone_subnet_nsg" {
   subnet_id                 = azurerm_subnet.firezone_subnet.id
   network_security_group_id = azurerm_network_security_group.hub_nsg.id

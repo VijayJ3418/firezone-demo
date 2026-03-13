@@ -206,30 +206,30 @@ resource "azurerm_virtual_network_peering" "hub_to_core_it" {
   use_remote_gateways          = false
 }
 
-# DNS Zone - COMPLETELY REMOVED: Using existing DNS zone from spoke network
-# Setting count = 0 to force Terraform to ignore these resources entirely
-
+# DNS Zone - ENABLED: Create DNS zone for Core IT Infrastructure
 resource "azurerm_private_dns_zone" "core_it_dns" {
-  count               = 0  # FORCE DISABLE - Don't create or manage
+  count               = var.dns_zone_name != "" ? 1 : 0
   name                = var.dns_zone_name
   resource_group_name = azurerm_resource_group.core_it_rg.name
   tags                = var.tags
 }
 
+# Link DNS zone to Core IT VNet
 resource "azurerm_private_dns_zone_virtual_network_link" "core_it_dns_link" {
-  count                 = 0  # FORCE DISABLE - Don't create or manage
+  count                 = var.dns_zone_name != "" ? 1 : 0
   name                  = "${var.name_prefix}core-it-dns-link"
   resource_group_name   = azurerm_resource_group.core_it_rg.name
-  private_dns_zone_name = "dummy"  # Dummy value since count = 0
+  private_dns_zone_name = azurerm_private_dns_zone.core_it_dns[0].name
   virtual_network_id    = azurerm_virtual_network.core_it_vnet.id
   tags                  = var.tags
 }
 
+# Link DNS zone to Hub VNet
 resource "azurerm_private_dns_zone_virtual_network_link" "hub_dns_link" {
-  count                 = 0  # FORCE DISABLE - Don't create or manage
+  count                 = var.dns_zone_name != "" && var.enable_hub_peering ? 1 : 0
   name                  = "${var.name_prefix}hub-dns-link"
   resource_group_name   = azurerm_resource_group.core_it_rg.name
-  private_dns_zone_name = "dummy"  # Dummy value since count = 0
+  private_dns_zone_name = azurerm_private_dns_zone.core_it_dns[0].name
   virtual_network_id    = var.hub_vnet_id
   tags                  = var.tags
 }

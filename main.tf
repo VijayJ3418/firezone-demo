@@ -142,17 +142,17 @@ module "azure_firezone_multi_region" {
   ]
 }
 
-# Application Gateway Module - COMMENTED OUT FOR STEP-BY-STEP DEPLOYMENT
-# module "azure_jenkins_appgw" {
-#   source = "./azure-jenkins-appgw"
+# Application Gateway Module - ENABLED FOR HTTPS ACCESS
+module "azure_jenkins_appgw" {
+  source = "./azure-jenkins-appgw"
 
-#   name_prefix         = var.name_prefix
-#   resource_group_name = module.azure_core_infrastructure.resource_group.name
-#   vnet_name          = module.azure_core_infrastructure.spoke_virtual_network.name
-#   jenkins_private_ip = module.azure_jenkins_vm.jenkins_vm.private_ip_address
-#   static_private_ip  = var.jenkins_static_ip
-#   jenkins_fqdn       = var.jenkins_fqdn
-#   tags               = var.tags
+  name_prefix         = var.name_prefix
+  resource_group_name = module.azure_core_it_infrastructure.resource_group.name
+  vnet_name          = module.azure_core_it_infrastructure.core_it_virtual_network.name
+  appgw_subnet_name  = module.azure_core_it_infrastructure.appgw_subnet.name
+  jenkins_private_ip = module.azure_jenkins_vm.jenkins_vm.private_ip_address
+  jenkins_fqdn       = var.jenkins_fqdn
+  tags               = var.tags
 
-#   depends_on = [module.azure_jenkins_vm]
-# }
+  depends_on = [module.azure_jenkins_vm, module.azure_core_it_infrastructure]
+}

@@ -47,6 +47,17 @@ output "jenkins_access_info" {
   }
 }
 
+# Application Gateway Output - ENABLED
+output "application_gateway" {
+  description = "Application Gateway information for HTTPS access"
+  value = {
+    id         = module.azure_jenkins_appgw.application_gateway.id
+    name       = module.azure_jenkins_appgw.application_gateway.name
+    public_ip  = module.azure_jenkins_appgw.application_gateway.public_ip
+    fqdn       = module.azure_jenkins_appgw.application_gateway.fqdn
+  }
+}
+
 # Architecture Summary
 output "architecture_summary" {
   description = "Summary of the deployed architecture"

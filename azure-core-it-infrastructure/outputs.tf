@@ -53,12 +53,11 @@ output "appgw_nsg" {
 }
 
 output "dns_zone" {
-  description = "Private DNS zone information - DISABLED: Using existing DNS zone from spoke network"
-  value = null
-  # value = var.dns_zone_name != "" ? {
-  #   id   = azurerm_private_dns_zone.core_it_dns[0].id
-  #   name = azurerm_private_dns_zone.core_it_dns[0].name
-  # } : null
+  description = "Private DNS zone information"
+  value = var.dns_zone_name != "" ? {
+    id   = azurerm_private_dns_zone.core_it_dns[0].id
+    name = azurerm_private_dns_zone.core_it_dns[0].name
+  } : null
 }
 
 output "vnet_peering" {
