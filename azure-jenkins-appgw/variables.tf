@@ -53,29 +53,29 @@ variable "static_private_ip" {
 
 variable "enable_public_ip" {
   type        = bool
-  default     = false
+  default     = true  # Fixed: Enable public IP for HTTPS internet access
   description = "Whether to create a public IP for the Application Gateway"
 }
 
 variable "appgw_sku_name" {
   type        = string
-  default     = "Standard_v2"
+  default     = "Standard"  # Fixed: Standard SKU supports private-only configuration
   description = "SKU name for Application Gateway"
   
   validation {
-    condition     = contains(["Standard_v2", "WAF_v2"], var.appgw_sku_name)
-    error_message = "Application Gateway SKU must be Standard_v2 or WAF_v2."
+    condition     = contains(["Standard", "Standard_v2", "WAF", "WAF_v2"], var.appgw_sku_name)
+    error_message = "Application Gateway SKU must be Standard, Standard_v2, WAF, or WAF_v2."
   }
 }
 
 variable "appgw_sku_tier" {
   type        = string
-  default     = "Standard_v2"
+  default     = "Standard"  # Fixed: Standard tier supports private-only configuration
   description = "SKU tier for Application Gateway"
   
   validation {
-    condition     = contains(["Standard_v2", "WAF_v2"], var.appgw_sku_tier)
-    error_message = "Application Gateway SKU tier must be Standard_v2 or WAF_v2."
+    condition     = contains(["Standard", "Standard_v2", "WAF", "WAF_v2"], var.appgw_sku_tier)
+    error_message = "Application Gateway SKU tier must be Standard, Standard_v2, WAF, or WAF_v2."
   }
 }
 
