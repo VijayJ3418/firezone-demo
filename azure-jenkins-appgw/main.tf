@@ -47,6 +47,7 @@ resource "azurerm_key_vault" "jenkins_kv" {
   resource_group_name = data.azurerm_resource_group.core_infrastructure.name
   tenant_id           = data.azurerm_client_config.current.tenant_id
   sku_name            = "standard"
+  purge_protection_enabled = false  # Added: Disable purge protection for easier management
   tags                = var.tags
 
   access_policy {
@@ -60,6 +61,7 @@ resource "azurerm_key_vault" "jenkins_kv" {
       "Import",
       "List",
       "Update",
+      "Purge",  # Added: Required for certificate deletion
     ]
 
     secret_permissions = [
@@ -67,6 +69,7 @@ resource "azurerm_key_vault" "jenkins_kv" {
       "List",
       "Set",
       "Delete",
+      "Purge",  # Added: Required for secret deletion
     ]
   }
 }
