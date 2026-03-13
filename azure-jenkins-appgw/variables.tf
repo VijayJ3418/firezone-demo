@@ -59,23 +59,23 @@ variable "enable_public_ip" {
 
 variable "appgw_sku_name" {
   type        = string
-  default     = "Standard_Small"  # Fixed: Use Standard_Small for basic configuration
+  default     = "Standard_v2"  # Fixed: Use Standard_v2 (Standard is deprecated)
   description = "SKU name for Application Gateway"
   
   validation {
-    condition     = contains(["Standard_Small", "Standard_Medium", "Standard_Large", "Standard_v2", "WAF_Large", "WAF_Medium", "WAF_v2"], var.appgw_sku_name)
-    error_message = "Application Gateway SKU must be one of: Standard_Small, Standard_Medium, Standard_Large, Standard_v2, WAF_Large, WAF_Medium, WAF_v2."
+    condition     = contains(["Standard_v2", "WAF_v2"], var.appgw_sku_name)
+    error_message = "Application Gateway SKU must be Standard_v2 or WAF_v2 (Standard is deprecated)."
   }
 }
 
 variable "appgw_sku_tier" {
   type        = string
-  default     = "Standard"  # Fixed: Standard tier (not Standard_Small)
+  default     = "Standard_v2"  # Fixed: Use Standard_v2 tier
   description = "SKU tier for Application Gateway"
   
   validation {
-    condition     = contains(["Standard", "Standard_v2", "WAF", "WAF_v2"], var.appgw_sku_tier)
-    error_message = "Application Gateway SKU tier must be Standard, Standard_v2, WAF, or WAF_v2."
+    condition     = contains(["Standard_v2", "WAF_v2"], var.appgw_sku_tier)
+    error_message = "Application Gateway SKU tier must be Standard_v2 or WAF_v2 (Standard is deprecated)."
   }
 }
 
