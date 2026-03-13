@@ -1,4 +1,4 @@
-# Outputs for Multi-Region Firezone Gateway Deployment - SIMPLIFIED
+# Outputs for Multi-Region Firezone Gateway Deployment - PRIVATE GATEWAYS
 
 output "firezone_primary" {
   description = "Primary Firezone gateway information"
@@ -6,10 +6,10 @@ output "firezone_primary" {
     vm_id             = module.firezone_primary.firezone_gateway.id
     vm_name           = module.firezone_primary.firezone_gateway.name
     private_ip        = module.firezone_primary.firezone_gateway.private_ip_address
-    public_ip         = module.firezone_primary.public_ip != null ? module.firezone_primary.public_ip.ip_address : null
     region            = var.primary_region
     instance          = "primary"
     resource_group    = var.primary_resource_group_name
+    access_method     = "Private IP only - access via Jenkins VM or VPN"
   }
 }
 
@@ -19,24 +19,24 @@ output "firezone_secondary" {
     vm_id             = module.firezone_secondary.firezone_gateway.id
     vm_name           = module.firezone_secondary.firezone_gateway.name
     private_ip        = module.firezone_secondary.firezone_gateway.private_ip_address
-    public_ip         = module.firezone_secondary.public_ip != null ? module.firezone_secondary.public_ip.ip_address : null
     region            = var.primary_region
     instance          = "secondary"
     resource_group    = var.primary_resource_group_name
+    access_method     = "Private IP only - access via Jenkins VM or VPN"
   }
 }
 
 output "firezone_access_info" {
   description = "Firezone access information"
   value = {
-    primary_wireguard_endpoint   = module.firezone_primary.public_ip != null ? "${module.firezone_primary.public_ip.ip_address}:51820" : "No public IP"
-    secondary_wireguard_endpoint = module.firezone_secondary.public_ip != null ? "${module.firezone_secondary.public_ip.ip_address}:51820" : "No public IP"
-    primary_health_check_url     = module.firezone_primary.public_ip != null ? "http://${module.firezone_primary.public_ip.ip_address}:8080" : "No public IP"
-    secondary_health_check_url   = module.firezone_secondary.public_ip != null ? "http://${module.firezone_secondary.public_ip.ip_address}:8080" : "No public IP"
-    primary_ssh_command          = module.firezone_primary.public_ip != null ? "ssh azureuser@${module.firezone_primary.public_ip.ip_address}" : "Use private IP"
-    secondary_ssh_command        = module.firezone_secondary.public_ip != null ? "ssh azureuser@${module.firezone_secondary.public_ip.ip_address}" : "Use private IP"
-    deployment_type              = "Dual gateway deployment with individual public IPs"
+    primary_private_ip           = module.firezone_primary.firezone_gateway.private_ip_address
+    secondary_private_ip         = module.firezone_secondary.firezone_gateway.private_ip_address
+    primary_ssh_command          = "ssh azureuser@${module.firezone_primary.firezone_gateway.private_ip_address}"
+    secondary_ssh_command        = "ssh azureuser@${module.firezone_secondary.firezone_gateway.private_ip_address}"
+    deployment_type              = "Private dual gateway deployment (no public IPs)"
     token_configured             = "Real Firezone token configured"
+    access_note                  = "Access gateways via Jenkins VM or establish VPN connection first"
+    security_note                = "Gateways are private - no direct internet access for security"
   }
 }
 

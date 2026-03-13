@@ -1,5 +1,5 @@
-# Multi-Region Firezone Gateway Deployment - SIMPLIFIED WITHOUT LOAD BALANCER
-# Deploy both gateways with individual public IPs for direct access
+# Multi-Region Firezone Gateway Deployment - PRIVATE GATEWAYS ONLY
+# Deploy both gateways with private IPs only (no public IPs for security)
 
 terraform {
   required_providers {
@@ -13,7 +13,7 @@ terraform {
 # Data sources
 data "azurerm_client_config" "current" {}
 
-# Primary Firezone Gateway (Instance 1)
+# Primary Firezone Gateway (Instance 1) - PRIVATE IP ONLY
 module "firezone_primary" {
   source = "../azure-firezone-gateway"
 
@@ -23,13 +23,13 @@ module "firezone_primary" {
   subnet_name        = var.primary_subnet_name
   vm_size            = var.vm_size
   ssh_public_key     = var.ssh_public_key
-  enable_public_ip   = true   # Enable public IP for direct access
+  enable_public_ip   = false  # NO PUBLIC IP - Private only
   firezone_token     = var.firezone_token
   log_level          = var.log_level
   tags               = merge(var.tags, { Region = var.primary_region, Instance = "primary" })
 }
 
-# Secondary Firezone Gateway (Instance 2) - Deploy in same region/subnet
+# Secondary Firezone Gateway (Instance 2) - PRIVATE IP ONLY
 module "firezone_secondary" {
   source = "../azure-firezone-gateway"
 
@@ -39,7 +39,7 @@ module "firezone_secondary" {
   subnet_name        = var.primary_subnet_name           # Same subnet
   vm_size            = var.vm_size
   ssh_public_key     = var.ssh_public_key
-  enable_public_ip   = true   # Enable public IP for direct access
+  enable_public_ip   = false  # NO PUBLIC IP - Private only
   firezone_token     = var.firezone_token
   log_level          = var.log_level
   tags               = merge(var.tags, { Region = var.primary_region, Instance = "secondary" })
