@@ -37,7 +37,7 @@ jenkins_fqdn      = "jenkins.np.dglearn.online"
 dns_zone_name     = "dglearn.online"
 
 # VPN Configuration - ENABLED FOR FIREZONE
-firezone_token = "demo-token-for-testing"  # Replace with actual token later
+firezone_token = "SFMyNTY.g2gDaANtAAAAJGM2ZWM0NzVjLWI0ZTUtNDg3OS05M2JiLWRlMjJiM2UxNjgwY20AAAAkOWY2MjljN2ItZWFkZS00MjgwLWIwM2MtYjMwNTkxY2IxNjNjbQAAADg0T1RJRktNMTExRTY0UThPQzdGU0FORzJCUkI5NU00TTc1TzBVSkdHTklBRUJFREY4SzIwPT09PW4GAJ-IqOacAWIAAVGA._Xik7tNVMcMBSLZSIQ6AOdasZlGm2nQty1PJMqVpAO8"  # Latest Firezone token from admin portal
 firezone_log_level = "info"  # Log level for Firezone gateways
 
 # SSH Key - UPDATE THIS WITH YOUR ACTUAL PUBLIC KEY

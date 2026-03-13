@@ -91,32 +91,32 @@ module "azure_jenkins_vm" {
 #   depends_on = [module.azure_core_infrastructure]
 # }
 
-# Multi-Region Firezone VPN Gateway Deployment - TEMPORARILY DISABLED FOR STATE CLEANUP
-# module "azure_firezone_multi_region" {
-#   count  = var.enable_firezone_multi_region ? 1 : 0
-#   source = "./azure-firezone-multi-region"
+# Multi-Region Firezone VPN Gateway Deployment - ENABLED
+module "azure_firezone_multi_region" {
+  count  = var.enable_firezone_multi_region ? 1 : 0
+  source = "./azure-firezone-multi-region"
 
-#   name_prefix                     = var.name_prefix
-#   primary_region                  = var.location
-#   primary_resource_group_name     = module.azure_core_infrastructure.resource_group.name
-#   primary_vnet_name              = module.azure_core_infrastructure.spoke_virtual_network.name
-#   primary_vnet_id                = module.azure_core_infrastructure.spoke_virtual_network.id
-#   primary_subnet_name            = module.azure_core_infrastructure.vpn_subnet.name
-#   secondary_region               = var.location  # Same region for Load Balancer compatibility
-#   secondary_resource_group_name  = module.azure_core_infrastructure.resource_group.name  # Same RG
-#   secondary_vnet_name           = module.azure_core_infrastructure.spoke_virtual_network.name  # Same VNet
-#   secondary_vnet_id             = module.azure_core_infrastructure.spoke_virtual_network.id  # Same VNet
-#   secondary_subnet_name         = module.azure_core_infrastructure.vpn_subnet.name  # Same subnet
-#   vm_size                       = "Standard_D2s_v3"
-#   ssh_public_key                = var.ssh_public_key
-#   firezone_token                = var.firezone_token
-#   log_level                     = var.firezone_log_level
-#   tags                          = var.tags
+  name_prefix                     = var.name_prefix
+  primary_region                  = var.location
+  primary_resource_group_name     = module.azure_core_infrastructure.resource_group.name
+  primary_vnet_name              = module.azure_core_infrastructure.spoke_virtual_network.name
+  primary_vnet_id                = module.azure_core_infrastructure.spoke_virtual_network.id
+  primary_subnet_name            = module.azure_core_infrastructure.vpn_subnet.name
+  secondary_region               = var.location  # Same region for Load Balancer compatibility
+  secondary_resource_group_name  = module.azure_core_infrastructure.resource_group.name  # Same RG
+  secondary_vnet_name           = module.azure_core_infrastructure.spoke_virtual_network.name  # Same VNet
+  secondary_vnet_id             = module.azure_core_infrastructure.spoke_virtual_network.id  # Same VNet
+  secondary_subnet_name         = module.azure_core_infrastructure.vpn_subnet.name  # Same subnet
+  vm_size                       = "Standard_D2s_v3"
+  ssh_public_key                = var.ssh_public_key
+  firezone_token                = var.firezone_token
+  log_level                     = var.firezone_log_level
+  tags                          = var.tags
 
-#   depends_on = [
-#     module.azure_core_infrastructure
-#   ]
-# }
+  depends_on = [
+    module.azure_core_infrastructure
+  ]
+}
 
 # Application Gateway Module - COMMENTED OUT FOR STEP-BY-STEP DEPLOYMENT
 # module "azure_jenkins_appgw" {

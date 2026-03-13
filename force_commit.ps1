@@ -1,4 +1,4 @@
 $env:GIT_EDITOR = "echo"
 git add .
-git commit -m "Temporarily disable Firezone module to clean up state conflicts"
+git commit -m "Re-enable Firezone module with real token and complete Load Balancer setup"
 git push origin main --force
