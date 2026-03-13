@@ -19,10 +19,16 @@ output "jenkins_vm" {
   sensitive   = true
 }
 
-# Firezone Multi-Region Outputs - ENABLED
+# Firezone Multi-Region Outputs - TEMPORARILY DISABLED
+# output "firezone_multi_region" {
+#   description = "Multi-region Firezone VPN gateway deployment information"
+#   value       = var.enable_firezone_multi_region ? module.azure_firezone_multi_region[0] : null
+#   sensitive   = true
+# }
+
 output "firezone_multi_region" {
-  description = "Multi-region Firezone VPN gateway deployment information"
-  value       = var.enable_firezone_multi_region ? module.azure_firezone_multi_region[0] : null
+  description = "Multi-region Firezone VPN gateway deployment information - TEMPORARILY DISABLED"
+  value       = null
   sensitive   = true
 }
 
