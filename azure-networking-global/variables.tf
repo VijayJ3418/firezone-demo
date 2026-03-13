@@ -35,6 +35,12 @@ variable "bastion_subnet_cidr" {
   description = "CIDR block for Azure Bastion subnet (equivalent to IAP access)"
 }
 
+variable "firezone_subnet_cidr" {
+  type        = string
+  default     = "172.16.3.0/24"
+  description = "CIDR block for Firezone gateways subnet"
+}
+
 variable "spoke_address_spaces" {
   type        = list(string)
   default     = ["192.168.0.0/16"]

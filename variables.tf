@@ -132,14 +132,26 @@ variable "tags" {
 # Additional variables needed by modules
 variable "jenkins_subnet_cidr" {
   type        = string
-  default     = "192.168.0.0/24"
-  description = "CIDR block for Jenkins subnet"
+  default     = "10.0.1.0/24"
+  description = "CIDR block for Jenkins subnet in Core IT Infrastructure VNet"
 }
 
 variable "appgw_subnet_cidr" {
   type        = string
-  default     = "192.168.128.0/23"
-  description = "CIDR block for Application Gateway subnet"
+  default     = "10.0.2.0/24"
+  description = "CIDR block for Application Gateway subnet in Core IT Infrastructure VNet"
+}
+
+variable "core_it_address_space" {
+  type        = string
+  default     = "10.0.0.0/16"
+  description = "Address space for Core IT Infrastructure VNet (az-core-it-infra)"
+}
+
+variable "hub_firezone_subnet_cidr" {
+  type        = string
+  default     = "172.16.3.0/24"
+  description = "CIDR block for Firezone subnet in hub network"
 }
 
 variable "gateway_subnet_cidr" {

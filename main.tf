@@ -29,11 +29,34 @@ module "azure_networking_global" {
   vpn_subnet_cidr       = var.hub_vpn_subnet_cidr
   gateway_subnet_cidr   = var.gateway_subnet_cidr
   bastion_subnet_cidr   = var.bastion_subnet_cidr
-  spoke_address_spaces  = [var.spoke_address_space, var.secondary_spoke_address_space]
+  firezone_subnet_cidr  = var.hub_firezone_subnet_cidr
+  spoke_address_spaces  = [var.spoke_address_space, var.secondary_spoke_address_space, var.core_it_address_space]
   enable_bastion        = var.enable_bastion
   enable_vpn_gateway    = var.enable_vpn_gateway
   vpn_gateway_sku       = var.vpn_gateway_sku
   tags                  = var.tags
+}
+
+# Core IT Infrastructure Module - NEW: Dedicated VNet for Jenkins
+module "azure_core_it_infrastructure" {
+  source = "./azure-core-it-infrastructure"
+
+  name_prefix                = var.name_prefix
+  location                  = var.location
+  core_it_address_space     = var.core_it_address_space
+  jenkins_subnet_cidr       = var.jenkins_subnet_cidr
+  appgw_subnet_cidr         = var.appgw_subnet_cidr
+  enable_hub_peering        = var.enable_hub_peering
+  hub_vnet_id               = module.azure_networking_global.hub_virtual_network.id
+  hub_resource_group_name   = module.azure_networking_global.resource_group.name
+  hub_vnet_name             = module.azure_networking_global.hub_virtual_network.name
+  hub_has_gateway           = var.enable_vpn_gateway
+  use_remote_gateways       = false
+  hub_firezone_subnet_cidr  = var.hub_firezone_subnet_cidr
+  dns_zone_name             = var.dns_zone_name
+  tags                      = var.tags
+
+  depends_on = [module.azure_networking_global]
 }
 
 # Spoke Network Module - WITH HUB PEERING AS PER EXERCISE REQUIREMENTS
@@ -59,18 +82,19 @@ module "azure_core_infrastructure" {
   depends_on = [module.azure_networking_global]
 }
 
-# Jenkins VM Module - ENABLED WITH FREE TRIAL COMPATIBLE VM SIZE
+# Jenkins VM Module - UPDATED: Now in Core IT Infrastructure VNet
 module "azure_jenkins_vm" {
   source = "./azure-jenkins-vm"
 
   name_prefix         = var.name_prefix
-  resource_group_name = module.azure_core_infrastructure.resource_group.name
-  vnet_name          = module.azure_core_infrastructure.spoke_virtual_network.name
+  resource_group_name = module.azure_core_it_infrastructure.resource_group.name
+  vnet_name          = module.azure_core_it_infrastructure.core_it_virtual_network.name
+  subnet_name        = module.azure_core_it_infrastructure.jenkins_subnet.name
   ssh_public_key     = var.ssh_public_key
   vm_size            = var.jenkins_vm_size
   tags               = var.tags
 
-  depends_on = [module.azure_core_infrastructure]
+  depends_on = [module.azure_core_it_infrastructure]
 }
 
 # Secondary Region Infrastructure for Firezone - DISABLED (using same region for Load Balancer)
@@ -91,22 +115,22 @@ module "azure_jenkins_vm" {
 #   depends_on = [module.azure_core_infrastructure]
 # }
 
-# Multi-Region Firezone VPN Gateway Deployment - ENABLED
+# Multi-Region Firezone VPN Gateway Deployment - UPDATED: Now in Hub Network
 module "azure_firezone_multi_region" {
   count  = var.enable_firezone_multi_region ? 1 : 0
   source = "./azure-firezone-multi-region"
 
   name_prefix                     = var.name_prefix
   primary_region                  = var.location
-  primary_resource_group_name     = module.azure_core_infrastructure.resource_group.name
-  primary_vnet_name              = module.azure_core_infrastructure.spoke_virtual_network.name
-  primary_vnet_id                = module.azure_core_infrastructure.spoke_virtual_network.id
-  primary_subnet_name            = module.azure_core_infrastructure.vpn_subnet.name
+  primary_resource_group_name     = module.azure_networking_global.resource_group.name
+  primary_vnet_name              = module.azure_networking_global.hub_virtual_network.name
+  primary_vnet_id                = module.azure_networking_global.hub_virtual_network.id
+  primary_subnet_name            = module.azure_networking_global.firezone_subnet.name
   secondary_region               = var.location  # Same region for Load Balancer compatibility
-  secondary_resource_group_name  = module.azure_core_infrastructure.resource_group.name  # Same RG
-  secondary_vnet_name           = module.azure_core_infrastructure.spoke_virtual_network.name  # Same VNet
-  secondary_vnet_id             = module.azure_core_infrastructure.spoke_virtual_network.id  # Same VNet
-  secondary_subnet_name         = module.azure_core_infrastructure.vpn_subnet.name  # Same subnet
+  secondary_resource_group_name  = module.azure_networking_global.resource_group.name  # Same RG
+  secondary_vnet_name           = module.azure_networking_global.hub_virtual_network.name  # Same VNet
+  secondary_vnet_id             = module.azure_networking_global.hub_virtual_network.id  # Same VNet
+  secondary_subnet_name         = module.azure_networking_global.firezone_subnet.name  # Same subnet
   vm_size                       = "Standard_D2s_v3"
   ssh_public_key                = var.ssh_public_key
   firezone_token                = var.firezone_token
@@ -114,7 +138,7 @@ module "azure_firezone_multi_region" {
   tags                          = var.tags
 
   depends_on = [
-    module.azure_core_infrastructure
+    module.azure_networking_global
   ]
 }
 

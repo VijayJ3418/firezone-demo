@@ -8,17 +8,19 @@ location    = "Central US"  # Changed back to Central US where infrastructure ex
 # VM Configuration - Updated to match working configuration
 jenkins_vm_size = "Standard_D2s_v3"  # Working size in Central US
 
-# Network Configuration
+# Network Configuration - UPDATED FOR NEW ARCHITECTURE
 hub_address_space     = "172.16.0.0/16"
-spoke_address_space   = "192.168.0.0/16"
-jenkins_subnet_cidr   = "192.168.0.0/24"
-appgw_subnet_cidr     = "192.168.128.0/23"
-vpn_subnet_cidr       = "192.168.131.0/24"
+spoke_address_space   = "192.168.0.0/16"  # Keep existing spoke for other workloads
+core_it_address_space = "10.0.0.0/16"     # NEW: Core IT Infrastructure VNet
+jenkins_subnet_cidr   = "10.0.1.0/24"     # Jenkins in Core IT VNet
+appgw_subnet_cidr     = "10.0.2.0/24"     # Application Gateway in Core IT VNet
+vpn_subnet_cidr       = "192.168.131.0/24" # Keep existing for compatibility
 
-# Hub Network Subnets
-hub_vpn_subnet_cidr   = "172.16.0.0/24"
-gateway_subnet_cidr   = "172.16.1.0/24"
-bastion_subnet_cidr   = "172.16.2.0/24"
+# Hub Network Subnets - UPDATED
+hub_vpn_subnet_cidr      = "172.16.0.0/24"
+hub_firezone_subnet_cidr = "172.16.3.0/24"  # NEW: Firezone gateways in hub
+gateway_subnet_cidr      = "172.16.1.0/24"
+bastion_subnet_cidr      = "172.16.2.0/24"
 
 # Feature Flags - UPDATED FOR SECURE VPN-ONLY DEPLOYMENT
 enable_hub_peering    = true   # Enable hub-spoke peering as per exercise
@@ -31,9 +33,9 @@ secondary_region             = "Central US"  # Same region for simplicity
 secondary_spoke_address_space = "10.168.0.0/16"
 secondary_vpn_subnet_cidr    = "10.168.130.0/24"
 
-# Jenkins Configuration
-jenkins_static_ip = "192.168.129.50"
-jenkins_fqdn      = "jenkins.np.dglearn.online"
+# Jenkins Configuration - UPDATED FOR HTTPS ACCESS
+jenkins_static_ip = "10.0.1.50"  # Updated for Core IT VNet
+jenkins_fqdn      = "jenkins-azure.dglearn.online"  # Updated FQDN as requested
 dns_zone_name     = "dglearn.online"
 
 # VPN Configuration - ENABLED FOR FIREZONE

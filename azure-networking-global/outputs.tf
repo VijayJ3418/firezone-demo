@@ -27,6 +27,15 @@ output "vpn_subnet" {
   }
 }
 
+output "firezone_subnet" {
+  description = "Firezone subnet information"
+  value = {
+    name             = azurerm_subnet.firezone_subnet.name
+    id               = azurerm_subnet.firezone_subnet.id
+    address_prefixes = azurerm_subnet.firezone_subnet.address_prefixes
+  }
+}
+
 output "gateway_subnet" {
   description = "Gateway subnet information (if VPN gateway enabled)"
   value = var.enable_vpn_gateway ? {
