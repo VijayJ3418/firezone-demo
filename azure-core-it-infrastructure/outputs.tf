@@ -52,13 +52,14 @@ output "appgw_nsg" {
   }
 }
 
-output "dns_zone" {
-  description = "Private DNS zone information"
-  value = var.dns_zone_name != "" ? {
-    id   = azurerm_private_dns_zone.core_it_dns[0].id
-    name = azurerm_private_dns_zone.core_it_dns[0].name
-  } : null
-}
+# DNS zone outputs temporarily disabled to resolve deployment issues
+# output "dns_zone" {
+#   description = "Private DNS zone information"
+#   value = var.dns_zone_name != "" && length(azurerm_private_dns_zone.core_it_dns) > 0 ? {
+#     id   = azurerm_private_dns_zone.core_it_dns[0].id
+#     name = azurerm_private_dns_zone.core_it_dns[0].name
+#   } : null
+# }
 
 output "vnet_peering" {
   description = "VNet peering information"

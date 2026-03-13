@@ -51,10 +51,11 @@ output "jenkins_access_info" {
 output "application_gateway" {
   description = "Application Gateway information for HTTPS access"
   value = {
-    id         = module.azure_jenkins_appgw.application_gateway.id
-    name       = module.azure_jenkins_appgw.application_gateway.name
-    public_ip  = module.azure_jenkins_appgw.application_gateway.public_ip
-    fqdn       = module.azure_jenkins_appgw.application_gateway.fqdn
+    id                = module.azure_jenkins_appgw.application_gateway.id
+    name              = module.azure_jenkins_appgw.application_gateway.name
+    private_ip        = module.azure_jenkins_appgw.application_gateway.private_ip_address
+    public_ip         = module.azure_jenkins_appgw.application_gateway.public_ip_address
+    jenkins_https_url = module.azure_jenkins_appgw.jenkins_access_info.fqdn_url
   }
 }
 
