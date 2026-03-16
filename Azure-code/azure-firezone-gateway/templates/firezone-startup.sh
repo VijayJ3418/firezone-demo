@@ -2,7 +2,7 @@
 # Firezone Gateway Installation Script for Azure VM
 # Based on official Firezone gateway installation
 
-set -e
+set -eo pipefail
 
 # Log all output
 exec > >(tee -a /var/log/firezone-startup.log)
@@ -29,8 +29,7 @@ apt-get install -y \
     lsb-release \
     ca-certificates \
     software-properties-common \
-    iptables \
-    systemd-resolved
+    iptables || true
 
 # Enable IP forwarding
 echo "Enabling IP forwarding..."
@@ -58,9 +57,19 @@ echo "Setting up Firezone..."
 mkdir -p /opt/firezone
 cd /opt/firezone
 
-# Download Firezone gateway
-echo "Downloading Firezone gateway..."
-curl -fsSL https://github.com/firezone/firezone/releases/latest/download/gateway.yml -o docker-compose.yml
+# Create docker-compose.yml directly (don't download - more reliable)
+cat > /opt/firezone/docker-compose.yml <<'COMPOSE'
+services:
+  gateway:
+    image: ghcr.io/firezone/gateway:1
+    restart: unless-stopped
+    env_file: .env
+    cap_add:
+      - NET_ADMIN
+    sysctls:
+      - net.ipv4.ip_forward=1
+      - net.ipv6.conf.all.forwarding=1
+COMPOSE
 
 # Create environment file
 cat > .env <<EOF
