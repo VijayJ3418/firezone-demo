@@ -50,6 +50,12 @@ resource "azurerm_key_vault" "jenkins_kv" {
   purge_protection_enabled = false  # Added: Disable purge protection for easier management
   tags                = var.tags
 
+  # Network access rules - Allow trusted Microsoft services
+  network_acls {
+    default_action = "Allow"
+    bypass         = "AzureServices"
+  }
+
   access_policy {
     tenant_id = data.azurerm_client_config.current.tenant_id
     object_id = data.azurerm_client_config.current.object_id
@@ -165,6 +171,12 @@ resource "azurerm_key_vault_access_policy" "appgw_kv_access" {
     "Get",
     "List",
   ]
+}
+
+# Add delay to ensure access policy propagation
+resource "time_sleep" "wait_for_kv_access" {
+  depends_on = [azurerm_key_vault_access_policy.appgw_kv_access]
+  create_duration = "30s"
 }
 
 # Application Gateway (equivalent to GCP Internal HTTPS Load Balancer)
@@ -308,6 +320,12 @@ resource "azurerm_application_gateway" "jenkins_appgw" {
 
   depends_on = [
     azurerm_key_vault_access_policy.appgw_kv_access,
-    azurerm_key_vault_certificate.jenkins_cert
+    azurerm_key_vault_certificate.jenkins_cert,
+    time_sleep.wait_for_kv_access
   ]
+
+  # Add explicit wait for Key Vault access policy propagation
+  lifecycle {
+    create_before_destroy = false
+  }
 }
