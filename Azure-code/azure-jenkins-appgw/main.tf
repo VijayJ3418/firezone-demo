@@ -189,12 +189,6 @@ resource "time_sleep" "wait_for_kv_access" {
   create_duration = "60s"
 }
 
-# Import existing Application Gateway if it exists
-import {
-  to = azurerm_application_gateway.jenkins_appgw
-  id = "/subscriptions/95fe2b5a-17cb-4b4c-b5ca-36c90e4dfefd/resourceGroups/vijay-core-it-infrastructure-rg/providers/Microsoft.Network/applicationGateways/vijay-jenkins-appgw"
-}
-
 # Application Gateway (equivalent to GCP Internal HTTPS Load Balancer)
 resource "azurerm_application_gateway" "jenkins_appgw" {
   name                = "${var.name_prefix}jenkins-appgw"

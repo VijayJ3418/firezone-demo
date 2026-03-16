@@ -1,6 +1,12 @@
 # Azure Jenkins Infrastructure - Root Configuration
 # This is the main entry point for deploying the complete Azure infrastructure
 
+# Import existing Application Gateway if it exists
+import {
+  to = module.azure_jenkins_appgw.azurerm_application_gateway.jenkins_appgw
+  id = "/subscriptions/95fe2b5a-17cb-4b4c-b5ca-36c90e4dfefd/resourceGroups/vijay-core-it-infrastructure-rg/providers/Microsoft.Network/applicationGateways/vijay-jenkins-appgw"
+}
+
 terraform {
   required_version = ">= 1.0"
   required_providers {
