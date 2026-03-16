@@ -249,6 +249,12 @@ resource "azurerm_application_gateway" "jenkins_appgw" {
     }
   }
 
+  # SSL Policy - Updated to modern TLS version
+  ssl_policy {
+    policy_type = "Predefined"
+    policy_name = "AppGwSslPolicy20220101"
+  }
+
   # SSL certificate from Key Vault
   ssl_certificate {
     name                = "jenkins-ssl-cert"
