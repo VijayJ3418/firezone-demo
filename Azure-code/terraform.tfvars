@@ -39,7 +39,7 @@ jenkins_fqdn      = "jenkins-azure.dglearn.online"  # Updated FQDN as requested
 dns_zone_name     = "dglearn.online"
 
 # VPN Configuration - ENABLED FOR FIREZONE
-firezone_token = "SFMyNTY.g2gDaANtAAAAJGM2ZWM0NzVjLWI0ZTUtNDg3OS05M2JiLWRlMjJiM2UxNjgwY20AAAAkNWRiOGIyZjYtZGExNi00Y2ZkLWEwMjQtMjE0YmUzMDNhMTIxbQAAADg0VklSVDQ5VjE5UzVDOE8xVExOUTU5MFVLMVMwTEFUUlZSRTM3QktTNkdFNlAwQ0Y2QkFHPT09PW4GAC-ru_WcAWIAAVGA.S0mFK-XvOjzNafGR80pyAQPH6FDhcvJzLcmxEgr0NeE"  # Latest Firezone token from admin portal - Updated with correct token
+firezone_token = "SFMyNTY.g2gDaANtAAAAJGM2ZWM0NzVjLWI0ZTUtNDg3OS05M2JiLWRlMjJiM2UxNjgwY20AAAAkNGVlYjM4NDMtYTc1Yi00ZWFjLWJmOGItNGY4YjE3ODEwOTA2bQAAADgzRlRMNkNCVFBWOU43SUFBUEUzQkpHUEdGQkNJMkhOSjlRUFUwOTJFRlZOSkdCOUI0VkYwPT09PW4GAOOJI_acAWIAAVGA.jTOvQhaLaBDeAKXGCLDoB3aq1FLhepaBrsLbX5CBoYA"  # Active token - confirmed working on primary gateway
 firezone_log_level = "info"  # Log level for Firezone gateways
 
 # SSH Key - UPDATE THIS WITH YOUR ACTUAL PUBLIC KEY
