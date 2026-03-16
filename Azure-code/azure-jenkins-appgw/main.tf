@@ -48,13 +48,45 @@ resource "azurerm_key_vault" "jenkins_kv" {
   tenant_id           = data.azurerm_client_config.current.tenant_id
   sku_name            = "standard"
   purge_protection_enabled = false  # Added: Disable purge protection for easier management
-  enable_rbac_authorization = true   # Enable RBAC instead of access policies
   tags                = var.tags
 
   # Network access rules - Allow trusted Microsoft services
   network_acls {
     default_action = "Allow"
     bypass         = "AzureServices"
+  }
+
+  # Access policy for current user (Terraform service principal)
+  access_policy {
+    tenant_id = data.azurerm_client_config.current.tenant_id
+    object_id = data.azurerm_client_config.current.object_id
+
+    certificate_permissions = [
+      "Create",
+      "Delete",
+      "Get",
+      "Import",
+      "List",
+      "Update",
+      "Purge",
+    ]
+
+    secret_permissions = [
+      "Get",
+      "List",
+      "Set",
+      "Delete",
+      "Purge",
+    ]
+
+    key_permissions = [
+      "Get",
+      "List",
+      "Create",
+      "Delete",
+      "Update",
+      "Purge",
+    ]
   }
 }
 
@@ -116,7 +148,7 @@ resource "azurerm_key_vault_certificate" "jenkins_cert" {
     }
   }
 
-  depends_on = [azurerm_role_assignment.current_user_kv_admin]
+  depends_on = [azurerm_key_vault.jenkins_kv]
 }
 
 # User Assigned Identity for Application Gateway
@@ -127,34 +159,33 @@ resource "azurerm_user_assigned_identity" "appgw_identity" {
   tags                = var.tags
 }
 
-# RBAC role assignment for current user to manage Key Vault
-resource "azurerm_role_assignment" "current_user_kv_admin" {
-  scope                = azurerm_key_vault.jenkins_kv.id
-  role_definition_name = "Key Vault Administrator"
-  principal_id         = data.azurerm_client_config.current.object_id
-}
+# Grant Application Gateway identity access to Key Vault with enhanced permissions
+resource "azurerm_key_vault_access_policy" "appgw_kv_access" {
+  key_vault_id = azurerm_key_vault.jenkins_kv.id
+  tenant_id    = data.azurerm_client_config.current.tenant_id
+  object_id    = azurerm_user_assigned_identity.appgw_identity.principal_id
 
-# RBAC role assignment for Application Gateway identity to access secrets
-resource "azurerm_role_assignment" "appgw_kv_secrets_user" {
-  scope                = azurerm_key_vault.jenkins_kv.id
-  role_definition_name = "Key Vault Secrets User"
-  principal_id         = azurerm_user_assigned_identity.appgw_identity.principal_id
-}
-
-# RBAC role assignment for Application Gateway identity to access certificates
-resource "azurerm_role_assignment" "appgw_kv_certificates_user" {
-  scope                = azurerm_key_vault.jenkins_kv.id
-  role_definition_name = "Key Vault Certificate User"
-  principal_id         = azurerm_user_assigned_identity.appgw_identity.principal_id
-}
-
-# Add delay to ensure RBAC propagation
-resource "time_sleep" "wait_for_rbac" {
-  depends_on = [
-    azurerm_role_assignment.current_user_kv_admin,
-    azurerm_role_assignment.appgw_kv_secrets_user,
-    azurerm_role_assignment.appgw_kv_certificates_user
+  certificate_permissions = [
+    "Get",
+    "List",
+    "GetIssuers",
+    "ListIssuers",
   ]
+
+  secret_permissions = [
+    "Get",
+    "List",
+  ]
+
+  key_permissions = [
+    "Get",
+    "List",
+  ]
+}
+
+# Add delay to ensure access policy propagation
+resource "time_sleep" "wait_for_kv_access" {
+  depends_on = [azurerm_key_vault_access_policy.appgw_kv_access]
   create_duration = "60s"
 }
 
@@ -298,10 +329,9 @@ resource "azurerm_application_gateway" "jenkins_appgw" {
   }
 
   depends_on = [
-    azurerm_role_assignment.appgw_kv_secrets_user,
-    azurerm_role_assignment.appgw_kv_certificates_user,
+    azurerm_key_vault_access_policy.appgw_kv_access,
     azurerm_key_vault_certificate.jenkins_cert,
-    time_sleep.wait_for_rbac
+    time_sleep.wait_for_kv_access
   ]
 
   # Add explicit wait for Key Vault access policy propagation
